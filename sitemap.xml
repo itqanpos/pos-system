@@ -1,0 +1,7 @@
+<!-- في جميع الصفحات، أضف هذا الرأس المشترك -->
+<nav class="navbar">
+    <a href="../index.html">الرئيسية</a>
+    <a href="dashboard.html">لوحة التحكم</a>
+    <a href="pos.html">نقاط البيع</a>
+    <!-- ... -->
+</nav>
