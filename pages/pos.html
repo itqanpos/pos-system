@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نقاط البيع - إتقان بوس</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/pos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="pos-page">
+    <!-- POS Header -->
+    <header class="pos-header">
+        <div class="container">
+            <div class="pos-brand">
+                <i class="fas fa-cash-register"></i>
+                <span>نقاط البيع</span>
+            </div>
+            
+            <div class="pos-info">
+                <div class="cashier-info">
+                    <i class="fas fa-user"></i>
+                    <span>الكاشير: أحمد محمد</span>
+                </div>
+                <div class="branch-info">
+                    <i class="fas fa-store"></i>
+                    <span>الفرع الرئيسي</span>
+                </div>
+                <div class="time-info">
+                    <i class="fas fa-clock"></i>
+                    <span id="currentTime"></span>
+                </div>
+            </div>
+            
+            <div class="pos-actions">
+                <a href="dashboard.html" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> لوحة التحكم
+                </a>
+                <button class="btn-help">
+                    <i class="fas fa-question-circle"></i> مساعدة
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- POS Main Layout -->
+    <div class="pos-container">
+        <!-- Left Side: Products -->
+        <section class="pos-products">
+            <div class="products-header">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="ابحث عن منتج بالاسم أو الباركود..." 
+                           id="productSearch" autofocus>
+                    <button class="btn-scan">
+                        <i class="fas fa-barcode"></i> مسح
+                    </button>
+                </div>
+                
+                <div class="category-tabs">
+                    <button class="category-tab active" data-category="all">الكل</button>
+                    <button class="category-tab" data-category="electronics">إلكترونيات</button>
+                    <button class="category-tab" data-category="food">أطعمة</button>
+                    <button class="category-tab" data-category="clothing">ملابس</button>
+                </div>
+            </div>
+            
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be loaded here dynamically -->
+            </div>
+        </section>
+
+        <!-- Right Side: Cart -->
+        <section class="pos-cart">
+            <div class="cart-header">
+                <h3><i class="fas fa-shopping-cart"></i> الفاتورة الحالية</h3>
+                <button class="btn-clear" onclick="clearCart()">
+                    <i class="fas fa-trash"></i> مسح الكل
+                </button>
+            </div>
+            
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items will be loaded here -->
+                <div class="empty-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <p>لا توجد منتجات في السلة</p>
+                </div>
+            </div>
+            
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>الإجمالي:</span>
+                    <span id="subtotal">٠ ر.س</span>
+                </div>
+                <div class="summary-row">
+                    <span>الضريبة (١٥٪):</span>
+                    <span id="tax">٠ ر.س</span>
+                </div>
+                <div class="summary-row total">
+                    <span>المبلغ الإجمالي:</span>
+                    <span id="total">٠ ر.س</span>
+                </div>
+                
+                <div class="customer-section">
+                    <label for="customerSelect"><i class="fas fa-user"></i> العميل</label>
+                    <select id="customerSelect">
+                        <option value="">عميل عادي</option>
+                        <option value="1">أحمد علي</option>
+                        <option value="2">محمد حسن</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="cart-actions">
+                <button class="btn-hold" onclick="holdInvoice()">
+                    <i class="fas fa-pause"></i> حفظ مؤقت
+                </button>
+                <button class="btn-payment" onclick="processPayment()">
+                    <i class="fas fa-credit-card"></i> الدفع
+                    <span id="paymentAmount">٠ ر.س</span>
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-credit-card"></i> إتمام الدفع</h3>
+                <button class="modal-close" onclick="closePaymentModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- Payment form will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/pos.js"></script>
+    <script src="../js/products.js"></script>
+</body>
+</html>
