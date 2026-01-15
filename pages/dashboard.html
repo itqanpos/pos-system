@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - إتقان بوس</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f9fafb;
+        }
+        
+        .sidebar {
+            width: 260px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        
+        .sidebar.collapsed .menu-text {
+            display: none;
+        }
+        
+        .main-content {
+            margin-right: 260px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar.collapsed + .main-content {
+            margin-right: 70px;
+        }
+        
+        .stat-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .dashboard-card:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .activity-item {
+            transition: all 0.3s ease;
+            border-right: 3px solid transparent;
+        }
+        
+        .activity-item:hover {
+            background: #f9fafb;
+            border-right-color: var(--primary);
+        }
+        
+        .badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .table-row:hover {
+            background: #f9fafb;
+        }
+        
+        .btn-float {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-float:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
+        }
+        
+        @media (max-width: 1024px) {
+            .sidebar {
+                position: fixed;
+                height: 100vh;
+                z-index: 1000;
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-right: 0;
+            }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+        
+        /* Dark Mode Support */
+        .dark .dashboard-card {
+            background: #1f2937;
+            border-color: #374151;
+        }
+        
+        .dark .stat-card {
+            background: #1f2937;
+            border-color: #374151;
+        }
+        
+        .dark .activity-item:hover {
+            background: #374151;
+        }
+        
+        .dark .table-row:hover {
+            background: #374151;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar bg-white dark:bg-gray-800 shadow-lg fixed h-full overflow-y-auto">
+        <!-- Sidebar Header -->
+        <div class="p-6 border-b dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-cash-register text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold">إتقان<span class="text-blue-600">بوس</span></h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">لوحة التحكم</p>
+                    </div>
+                </div>
+                <button id="toggleSidebar" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <!-- User Info -->
+            <div class="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="relative">
+                        <img src="https://ui-avatars.com/api/?name=أحمد+محمد&background=3b82f6&color=fff" 
+                             alt="صورة المستخدم" 
+                             class="w-12 h-12 rounded-full border-2 border-white dark:border-gray-600">
+                        <div class="absolute bottom-0 left-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-bold">أحمد محمد</h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">مدير النظام</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation Menu -->
+        <nav class="p-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="#" class="flex items-center space-x-3 space-x-reverse p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
+                        <i class="fas fa-home"></i>
+                        <span class="menu-text font-medium">لوحة التحكم</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="pos.html" class="flex items-center space-x-3 space-x-reverse p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                        <i class="fas fa-cash-register"></i>
+                        <span class="menu-text">نقاط البيع</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="inventory.html" class="flex items-center space-x-3 space-x-reverse p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                        <i class="fas fa-boxes"></i>
+                        <span class="menu-text">المخزون</span>
+                        <span class="badge badge-danger ml-auto">١٣</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="customers.html" class="flex items-center space-x-3 space-x-reverse p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                        <i class="fas fa-users"></i>
+                        <span class="menu-text">العملاء</span>
+                        <span class="badge badge-success ml-auto">+٨٥</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="reports.html" class="flex items-center space-x-3 space-x-reverse p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                        <i class="fas fa-chart-bar"></i>
+                        <span class="menu-text">التقارير</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="accounting.html" class="flex items-center space-x-3 space-x-reverse p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                        <i class="fas fa-calculator"></i>
+                        <span class="menu-text">المحاسبة</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="employees.html" class="flex items-center space-x-3 space-x-reverse p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                        <i class="fas fa-user-tie"></i>
+                        <span class="menu-text">الموظفين</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="branches.html" class="flex items-center space-x-3 space-x-reverse p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                        <i class="fas fa-store"></i>
+                        <span class="menu-text">الفروع</span>
+                        <span class="badge badge-info ml-auto">٣</span>
+                    </a>
+                </li>
+                
+                <!-- Settings Section -->
+                <li class="pt-4 mt-4 border-t dark:border-gray-700">
+                    <a href="settings.html" class="flex items-center space-x-3 space-x-reverse p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                        <i class="fas fa-cog"></i>
+                        <span class="menu-text">الإعدادات</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="help.html" class="flex items-center space-x-3 space-x-reverse p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                        <i class="fas fa-question-circle"></i>
+                        <span class="menu-text">المساعدة</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="index.html" class="flex items-center space-x-3 space-x-reverse p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-red-600 dark:text-red-400">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="menu-text">تسجيل الخروج</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <!-- System Status -->
+        <div class="p-4 border-t dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-600 dark:text-gray-400">حالة النظام</span>
+                <div class="flex items-center space-x-1">
+                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span class="text-xs text-green-600 dark:text-green-400">مستقر</span>
+                </div>
+            </div>
+            <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                آخر تحديث: <span id="lastUpdateTime">الآن</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main id="mainContent" class="main-content p-6">
+        <!-- Top Bar -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 space-y-4 md:space-y-0">
+            <!-- Page Title -->
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                    <i class="fas fa-home text-blue-600 mr-2"></i>
+                    لوحة التحكم الرئيسية
+                </h1>
+                <p class="text-gray-600 dark:text-gray-400 mt-1">
+                    مرحبًا أحمد، إليك نظرة عامة على أداء متجرك
+                </p>
+            </div>
+            
+            <!-- Top Bar Actions -->
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <!-- Date Picker -->
+                <div class="relative">
+                    <input type="date" id="datePicker" class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg px-4 py-2">
+                </div>
+                
+                <!-- Notifications -->
+                <div class="relative">
+                    <button id="notificationBtn" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center">
+                        <i class="fas fa-bell text-gray-600 dark:text-gray-400"></i>
+                        <span class="notification-badge">٣</span>
+                    </button>
+                </div>
+                
+                <!-- Quick Actions Dropdown -->
+                <div class="relative">
+                    <button id="quickActionsBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center space-x-2 space-x-reverse">
+                        <i class="fas fa-plus"></i>
+                        <span>إجراء سريع</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    
+                    <!-- Dropdown Menu -->
+                    <div id="quickActionsMenu" class="hidden absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border dark:border-gray-700 z-50">
+                        <a href="pos.html" class="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 border-b dark:border-gray-700">
+                            <i class="fas fa-cash-register text-blue-600 mr-2"></i>
+                            بدء عملية بيع
+                        </a>
+                        <a href="inventory.html?action=add" class="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 border-b dark:border-gray-700">
+                            <i class="fas fa-box text-green-600 mr-2"></i>
+                            إضافة منتج
+                        </a>
+                        <a href="customers.html?action=add" class="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 border-b dark:border-gray-700">
+                            <i class="fas fa-user-plus text-purple-600 mr-2"></i>
+                            إضافة عميل
+                        </a>
+                        <a href="reports.html" class="block px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="fas fa-chart-line text-orange-600 mr-2"></i>
+                            إنشاء تقرير
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Sales Card -->
+            <div class="stat-card p-6 rounded-xl bg-gradient-to-br from-blue-50 to-white dark:from-blue-900/20 dark:to-gray-800">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-3 bg-blue-100 dark:bg-blue-800 rounded-lg">
+                        <i class="fas fa-shopping-cart text-blue-600 dark:text-blue-400 text-xl"></i>
+                    </div>
+                    <span class="text-sm text-green-600 dark:text-green-400 font-medium">
+                        <i class="fas fa-arrow-up"></i> ١٥.٥٪
+                    </span>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">٤٥,٢٠٠ ر.س</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">المبيعات اليوم</p>
+                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                    <i class="fas fa-calendar-alt ml-1"></i>
+                    <span>مقارنة بالأمس: ٣٩,١٢٠ ر.س</span>
+                </div>
+            </div>
+            
+            <!-- Orders Card -->
+            <div class="stat-card p-6 rounded-xl bg-gradient-to-br from-green-50 to-white dark:from-green-900/20 dark:to-gray-800">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-3 bg-green-100 dark:bg-green-800 rounded-lg">
+                        <i class="fas fa-receipt text-green-600 dark:text-green-400 text-xl"></i>
+                    </div>
+                    <span class="text-sm text-green-600 dark:text-green-400 font-medium">
+                        <i class="fas fa-arrow-up"></i> ٨.٢٪
+                    </span>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">١٢٤</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">الطلبات اليوم</p>
+                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                    <i class="fas fa-clock ml-1"></i>
+                    <span>متوسط القيمة: ٣٦٥ ر.س</span>
+                </div>
+            </div>
+            
+            <!-- Customers Card -->
+            <div class="stat-card p-6 rounded-xl bg-gradient-to-br from-purple-50 to-white dark:from-purple-900/20 dark:to-gray-800">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-3 bg-purple-100 dark:bg-purple-800 rounded-lg">
+                        <i class="fas fa-users text-purple-600 dark:text-purple-400 text-xl"></i>
+                    </div>
+                    <span class="text-sm text-green-600 dark:text-green-400 font-medium">
+                        <i class="fas fa-arrow-up"></i> ٢٢.٣٪
+                    </span>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">٨٥</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">عملاء جدد</p>
+                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                    <i class="fas fa-user-check ml-1"></i>
+                    <span>إجمالي العملاء: ٢,٤٨٥</span>
+                </div>
+            </div>
+            
+            <!-- Inventory Card -->
+            <div class="stat-card p-6 rounded-xl bg-gradient-to-br from-orange-50 to-white dark:from-orange-900/20 dark:to-gray-800">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-3 bg-orange-100 dark:bg-orange-800 rounded-lg">
+                        <i class="fas fa-boxes text-orange-600 dark:text-orange-400 text-xl"></i>
+                    </div>
+                    <span class="text-sm text-red-600 dark:text-red-400 font-medium">
+                        <i class="fas fa-exclamation-circle"></i> تنبيه
+                    </span>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">١٣</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">منتجات منخفضة</p>
+                <a href="inventory.html?alert=low" class="inline-flex items-center text-sm text-orange-600 dark:text-orange-400 hover:text-orange-700">
+                    <i class="fas fa-eye ml-1"></i>
+                    <span>عرض المنتجات</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Charts and Reports -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Sales Chart -->
+            <div class="dashboard-card p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">
+                        <i class="fas fa-chart-line text-blue-600 mr-2"></i>
+                        إحصائيات المبيعات
+                    </h3>
+                    <select class="bg-gray-50 dark:bg-gray-800 border dark:border-gray-700 rounded-lg px-3 py-1 text-sm">
+                        <option>آخر ٧ أيام</option>
+                        <option>آخر ٣٠ يوم</option>
+                        <option>هذا الشهر</option>
+                        <option>هذا العام</option>
+                    </select>
+                </div>
+                <div class="h-72">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Top Products -->
+            <div class="dashboard-card p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">
+                        <i class="fas fa-star text-yellow-500 mr-2"></i>
+                        أفضل المنتجات مبيعًا
+                    </h3>
+                    <a href="reports.html?type=products" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700">
+                        عرض الكل →
+                    </a>
+                </div>
+                <div class="space-y-4">
+                    <!-- Product 1 -->
+                    <div class="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-10 h-10 bg-blue-100 dark:bg-blue-800 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-mobile-alt text-blue-600 dark:text-blue-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">هاتف ذكي X1</h4>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">إلكترونيات</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold">٣٤,٨٠٠ ر.س</div>
+                            <div class="text-sm text-green-600 dark:text-green-400">٤٨ مبيعة</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 2 -->
+                    <div class="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-10 h-10 bg-green-100 dark:bg-green-800 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-tshirt text-green-600 dark:text-green-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">قميص رجالي</h4>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">ملابس</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold">١٨,٥٠٠ ر.س</div>
+                            <div class="text-sm text-green-600 dark:text-green-400">١٢٣ مبيعة</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 3 -->
+                    <div class="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-10 h-10 bg-purple-100 dark:bg-purple-800 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-wine-bottle text-purple-600 dark:text-purple-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">عطر فاخر</h4>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">عطور</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold">٢٥,٣٠٠ ر.س</div>
+                            <div class="text-sm text-green-600 dark:text-green-400">٨٩ مبيعة</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 4 -->
+                    <div class="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-10 h-10 bg-orange-100 dark:bg-orange-800 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-book text-orange-600 dark:text-orange-400"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">كتاب تطوير الذات</h4>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">كتب</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold">٩,٨٠٠ ر.س</div>
+                            <div class="text-sm text-green-600 dark:text-green-400">٦٥ مبيعة</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activities and Orders -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Recent Activities -->
+            <div class="dashboard-card p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">
+                        <i class="fas fa-history text-gray-600 dark:text-gray-400 mr-2"></i>
+                        الأنشطة الأخيرة
+                    </h3>
+                    <a href="reports.html?tab=activities" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700">
+                        عرض الكل →
+                    </a>
+                </div>
+                <div class="space-y-4">
+                    <!-- Activity 1 -->
+                    <div class="activity-item p-4 rounded-lg border dark:border-gray-700">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start space-x-3 space-x-reverse">
+                                <div class="w-8 h-8 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-check text-green-600 dark:text-green-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">عملية بيع مكتملة</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">فاتورة #INV-2024-00124</p>
+                                </div>
+                            </div>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">منذ ٥ دقائق</span>
+                        </div>
+                        <div class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+                            المبلغ: <span class="font-bold">٤٥٠ ر.س</span> | الكاشير: أحمد
+                        </div>
+                    </div>
+                    
+                    <!-- Activity 2 -->
+                    <div class="activity-item p-4 rounded-lg border dark:border-gray-700">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start space-x-3 space-x-reverse">
+                                <div class="w-8 h-8 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-user-plus text-blue-600 dark:text-blue-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">عميل جديد مسجل</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">محمد السعيد</p>
+                                </div>
+                            </div>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">منذ ١٥ دقيقة</span>
+                        </div>
+                        <div class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+                            رقم الهاتف: ٠٥٠١٢٣٤٥٦٧ | بريد: mohamed@example.com
+                        </div>
+                    </div>
+                    
+                    <!-- Activity 3 -->
+                    <div class="activity-item p-4 rounded-lg border dark:border-gray-700">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start space-x-3 space-x-reverse">
+                                <div class="w-8 h-8 bg-red-100 dark:bg-red-800 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">تنبيه مخزون منخفض</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">منتج #P-0456</p>
+                                </div>
+                            </div>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">منذ ٣٠ دقيقة</span>
+                        </div>
+                        <div class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+                            الكمية الحالية: ٣ | الحد الأدنى: ١٠
+                        </div>
+                    </div>
+                    
+                    <!-- Activity 4 -->
+                    <div class="activity-item p-4 rounded-lg border dark:border-gray-700">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start space-x-3 space-x-reverse">
+                                <div class="w-8 h-8 bg-purple-100 dark:bg-purple-800 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-sync-alt text-purple-600 dark:text-purple-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">مزامنة البيانات</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">الفروع الثلاثة</p>
+                                </div>
+                            </div>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">منذ ساعة</span>
+                        </div>
+                        <div class="mt-2 text-sm text-gray-700 dark:text-gray-300">
+                            ٤٨ عملية مزامنة ناجحة
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Orders -->
+            <div class="dashboard-card p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">
+                        <i class="fas fa-clipboard-list text-indigo-600 dark:text-indigo-400 mr-2"></i>
+                        أحدث الطلبات
+                    </h3>
+                    <a href="pos.html?view=orders" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700">
+                        عرض الكل →
+                    </a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b dark:border-gray-700">
+                                <th class="text-right py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">رقم الفاتورة</th>
+                                <th class="text-right py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">العميل</th>
+                                <th class="text-right py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">المبلغ</th>
+                                <th class="text-right py-3 px-4 text-sm font-medium text-gray-600 dark:text-gray-400">الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-row border-b dark:border-gray-700">
+                                <td class="py-3 px-4 font-medium">#INV-2024-00124</td>
+                                <td class="py-3 px-4">أحمد علي</td>
+                                <td class="py-3 px-4 font-bold">٤٥٠ ر.س</td>
+                                <td class="py-3 px-4">
+                                    <span class="badge badge-success">مكتمل</span>
+                                </td>
+                            </tr>
+                            <tr class="table-row border-b dark:border-gray-700">
+                                <td class="py-3 px-4 font-medium">#INV-2024-00123</td>
+                                <td class="py-3 px-4">محمد حسن</td>
+                                <td class="py-3 px-4 font-bold">١,٢٤٠ ر.س</td>
+                                <td class="py-3 px-4">
+                                    <span class="badge badge-success">مكتمل</span>
+                                </td>
+                            </tr>
+                            <tr class="table-row border-b dark:border-gray-700">
+                                <td class="py-3 px-4 font-medium">#INV-2024-00122</td>
+                                <td class="py-3 px-4">سارة محمد</td>
+                                <td class="py-3 px-4 font-bold">٨٩٠ ر.س</td>
+                                <td class="py-3 px-4">
+                                    <span class="badge badge-warning">معلق</span>
+                                </td>
+                            </tr>
+                            <tr class="table-row border-b dark:border-gray-700">
+                                <td class="py-3 px-4 font-medium">#INV-2024-00121</td>
+                                <td class="py-3 px-4">خالد أحمد</td>
+                                <td class="py-3 px-4 font-bold">٣,٤٥٠ ر.س</td>
+                                <td class="py-3 px-4">
+                                    <span class="badge badge-danger">ملغي</span>
+                                </td>
+                            </tr>
+                            <tr class="table-row">
+                                <td class="py-3 px-4 font-medium">#INV-2024-00120</td>
+                                <td class="py-3 px-4">فاطمة علي</td>
+                                <td class="py-3 px-4 font-bold">١,١٢٠ ر.س</td>
+                                <td class="py-3 px-4">
+                                    <span class="badge badge-success">مكتمل</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Stats Footer -->
+        <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-gray-900 dark:text-white">١٥</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">طلبات اليوم</div>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-gray-900 dark:text-white">٨</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">عملاء جدد</div>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-gray-900 dark:text-white">٩٨٪</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">رضا العملاء</div>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-gray-900 dark:text-white">٠</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">مشاكل نظام</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Floating Action Button -->
+    <button id="floatBtn" class="btn-float">
+        <i class="fas fa-plus text-xl"></i>
+    </button>
+
+    <!-- Notifications Panel -->
+    <div id="notificationsPanel" class="hidden fixed top-0 left-0 w-full md:w-96 h-full bg-white dark:bg-gray-800 shadow-2xl z-50 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold">
+                    <i class="fas fa-bell text-blue-600 mr-2"></i>
+                    الإشعارات
+                </h3>
+                <button id="closeNotifications" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Notification 1 -->
+                <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-r-4 border-blue-500">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <h4 class="font-medium">عملية بيع كبيرة</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                تم إكمال عملية بيع بقيمة ٣,٤٥٠ ر.س
+                            </p>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 mt-2 block">منذ ٥ دقائق</span>
+                        </div>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Notification 2 -->
+                <div class="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border-r-4 border-yellow-500">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <h4 class="font-medium">تنبيه مخزون</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                منتج "هاتف ذكي X1" كمية منخفضة (٣ فقط)
+                            </p>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 mt-2 block">منذ ٣٠ دقيقة</span>
+                        </div>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Notification 3 -->
+                <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border-r-4 border-green-500">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <h4 class="font-medium">عميل جديد</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                محمد السعيد سجل كم
