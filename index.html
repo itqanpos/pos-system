@@ -5,35 +5,645 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إتقان بوس - نظام نقاط البيع المتكامل</title>
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <!-- الأنماط الرئيسية -->
     <style>
-        * {
-            font-family: 'Cairo', sans-serif;
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f9fafb;
         }
         
-        .hero-gradient {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Cairo', sans-serif;
+        }
+        
+        body {
+            color: #1f2937;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* ==== الشريط العلوي ==== */
+        .navbar {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 2rem;
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+        
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .nav-brand .logo {
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .nav-brand h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        
+        .nav-brand .highlight {
+            color: #3b82f6;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: #3b82f6;
+            background: #eff6ff;
+        }
+        
+        .nav-link.active {
+            color: #3b82f6;
+            background: #eff6ff;
+        }
+        
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 0.625rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+        }
+        
+        .btn-secondary:hover {
+            background: #eff6ff;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #6b7280;
+            cursor: pointer;
+        }
+        
+        /* ==== قسم البطل ==== */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 2rem 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+        }
+        
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-content h2 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-content h1 .highlight {
+            color: #dbeafe;
+        }
+        
+        .hero-content p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+        
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+        
+        /* لوحة العرض */
+        .dashboard-preview {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 8px solid white;
+        }
+        
+        .browser-bar {
+            background: #f1f5f9;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .browser-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .dot-red { background: #f87171; }
+        .dot-yellow { background: #fbbf24; }
+        .dot-green { background: #34d399; }
+        
+        .browser-url {
+            flex: 1;
+            text-align: center;
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+        
+        .dashboard-content {
+            background: #1f2937;
+            padding: 1rem;
+        }
+        
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-box {
+            background: #374151;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        .stat-box-label {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-box-value {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-box-change {
+            font-size: 0.875rem;
+        }
+        
+        .change-up { color: #34d399; }
+        .change-down { color: #f87171; }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+        
+        .product-item {
+            background: #374151;
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .product-name {
+            color: #9ca3af;
+            font-size: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .product-price {
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        /* ==== الميزات ==== */
+        .features {
+            padding: 6rem 2rem;
+            background: #f9fafb;
+        }
+        
+        .features-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        
+        .section-header p {
+            color: #6b7280;
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s;
         }
         
         .feature-card:hover {
-            transform: translateY(-10px);
-            transition: transform 0.3s ease;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: #3b82f6;
         }
         
-        .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
         }
         
+        .feature-pos .feature-icon { background: #dbeafe; color: #1d4ed8; }
+        .feature-inventory .feature-icon { background: #dcfce7; color: #15803d; }
+        .feature-accounting .feature-icon { background: #f3e8ff; color: #7c3aed; }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        
+        .feature-card p {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-list {
+            list-style: none;
+        }
+        
+        .feature-list li {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .feature-list i {
+            color: #10b981;
+        }
+        
+        /* ==== الأسعار ==== */
+        .pricing {
+            padding: 6rem 2rem;
+            background: white;
+        }
+        
+        .pricing-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .pricing-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e5e7eb;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pricing-card.popular {
+            border-color: #3b82f6;
+            transform: scale(1.05);
+        }
+        
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            right: 2rem;
+            background: #3b82f6;
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+        
+        .pricing-card .subtitle {
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+        
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 2rem;
+        }
+        
+        .price-period {
+            font-size: 1rem;
+            color: #6b7280;
+            font-weight: normal;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .pricing-features i {
+            color: #10b981;
+        }
+        
+        .feature-unavailable {
+            color: #9ca3af;
+        }
+        
+        .feature-unavailable i {
+            color: #9ca3af;
+        }
+        
+        /* ==== الفوتر ==== */
+        footer {
+            background: #1f2937;
+            color: white;
+            padding: 4rem 2rem 2rem;
+        }
+        
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+        
+        .footer-brand h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-brand .highlight {
+            color: #3b82f6;
+        }
+        
+        .footer-brand p {
+            color: #d1d5db;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #374151;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .social-link:hover {
+            background: #3b82f6;
+            transform: translateY(-2px);
+        }
+        
+        .footer-section h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #3b82f6;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #d1d5db;
+        }
+        
+        .contact-item i {
+            color: #3b82f6;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+        
+        /* ==== Floating Elements ==== */
         .floating-element {
+            position: absolute;
+            background: white;
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
             animation: float 6s ease-in-out infinite;
         }
         
@@ -42,1099 +652,407 @@
             50% { transform: translateY(-20px); }
         }
         
-        .dashboard-preview {
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            border-radius: 20px;
-            overflow: hidden;
+        .floating-1 {
+            top: 100px;
+            left: 50px;
+            width: 160px;
         }
         
-        .browser-bar {
-            background: #f1f5f9;
-            padding: 8px 16px;
-            border-bottom: 1px solid #e2e8f0;
+        .floating-2 {
+            bottom: 100px;
+            right: 50px;
+            width: 160px;
         }
         
-        .browser-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-left: 6px;
+        /* ==== Responsive ==== */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .pricing-card.popular {
+                transform: none;
+            }
         }
         
-        .notification-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #ef4444;
-            color: white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 1rem;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .nav-actions {
+                display: none;
+            }
+            
+            .hero {
+                padding: 100px 1rem 60px;
+            }
+            
+            .hero-actions {
+                flex-direction: column;
+            }
+            
+            .hero-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+            }
+            
+            .features-grid,
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .floating-element {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* ==== Animations ==== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        
+        /* ==== Scroll Animation ==== */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
-</head>
-<body class="bg-gray-50 text-gray-800">
-    
-    <!-- Navigation -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3 space-x-reverse">
-                    <div class="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-cash-register text-white text-xl"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-900">إتقان<span class="text-blue-600">بوس</span></h1>
-                        <p class="text-xs text-gray-500">itqanpos.github.io</p>
-                    </div>
-                </div>
-                
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex items-center space-x-8 space-x-reverse">
-                    <a href="#features" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">الميزات</a>
-                    <a href="#pricing" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">الأسعار</a>
-                    <a href="#demo" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">تجربة مجانية</a>
-                    <a href="#contact" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">التواصل</a>
-                </div>
-                
-                <!-- Auth Buttons -->
-                <div class="flex items-center space-x-4 space-x-reverse">
-                    <a href="/login" class="hidden md:inline text-gray-700 hover:text-blue-600 font-medium">
-                        تسجيل الدخول
-                    </a>
-                    <a href="/signup" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl hover:opacity-90 transition-all shadow-lg hover:shadow-xl font-medium">
-                        ابدأ مجاناً <i class="fas fa-arrow-left mr-2"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero-gradient text-white pt-16 pb-24">
-        <div class="container mx-auto px-4">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                
-                <!-- Left Content -->
-                <div class="text-right">
-                    <!-- Badge -->
-                    <div class="inline-flex items-center px-4 py-2 bg-white/20 rounded-full backdrop-blur-sm mb-6">
-                        <i class="fas fa-users ml-2"></i>
-                        <span class="font-medium">أكثر من <span class="font-bold">5,000</span> متجر يثقون بنا</span>
-                    </div>
-                    
-                    <!-- Main Heading -->
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-                        نظام نقاط بيع متكامل
-                        <span class="block text-blue-200">لتحويل عملك التجاري</span>
-                    </h1>
-                    
-                    <!-- Description -->
-                    <p class="text-xl text-blue-100 mb-10 max-w-2xl">
-                        نظام سحابي شامل لإدارة المبيعات، المخزون، المحاسبة، والعملاء. 
-                        صمم خصيصًا للمتاجر والمطاعم والمؤسسات التجارية.
-                    </p>
-                    
-                    <!-- CTA Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-4 justify-end mb-12">
-                        <a href="/signup" class="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-700 rounded-xl hover:bg-gray-100 transition-all shadow-xl text-lg font-bold">
-                            ابدأ تجربتك المجانية
-                            <i class="fas fa-arrow-left mr-3"></i>
-                        </a>
-                        
-                        <a href="#demo" class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white rounded-xl hover:bg-white/10 transition-all text-lg font-medium">
-                            <i class="fas fa-play-circle ml-3"></i>
-                            شاهد فيديو توضيحي
-                        </a>
-                    </div>
-                    
-                    <!-- Stats -->
-                    <div class="grid grid-cols-3 gap-6 max-w-xl mr-auto lg:mr-0">
-                        <div class="stat-card p-4 rounded-2xl text-center">
-                            <div class="text-3xl font-bold mb-1">٩٩.٩٪</div>
-                            <div class="text-sm text-blue-200">توقيت تشغيل</div>
-                        </div>
-                        <div class="stat-card p-4 rounded-2xl text-center">
-                            <div class="text-3xl font-bold mb-1">+٥,٠٠٠</div>
-                            <div class="text-sm text-blue-200">عميل راضٍ</div>
-                        </div>
-                        <div class="stat-card p-4 rounded-2xl text-center">
-                            <div class="text-3xl font-bold mb-1">٢٤/٧</div>
-                            <div class="text-sm text-blue-200">دعم فني</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Right Content - Dashboard Preview -->
-                <div class="relative">
-                    <div class="dashboard-preview bg-white">
-                        <!-- Browser Bar -->
-                        <div class="browser-bar flex items-center">
-                            <div>
-                                <span class="browser-dot bg-red-400"></span>
-                                <span class="browser-dot bg-yellow-400"></span>
-                                <span class="browser-dot bg-green-400"></span>
-                            </div>
-                            <div class="flex-1 text-center text-sm text-gray-500">
-                                pospro.com/dashboard
-                            </div>
-                        </div>
-                        
-                        <!-- Dashboard Content -->
-                        <div class="p-4 bg-gray-900">
-                            <div class="grid grid-cols-2 gap-4 mb-4">
-                                <div class="bg-gray-800 rounded-lg p-4">
-                                    <div class="text-gray-400 text-sm mb-2">المبيعات اليوم</div>
-                                    <div class="text-2xl font-bold text-white">٤٥,٢٠٠ ر.س</div>
-                                    <div class="text-green-400 text-sm mt-1">
-                                        <i class="fas fa-arrow-up"></i> +١٥٪ من الأمس
-                                    </div>
-                                </div>
-                                <div class="bg-gray-800 rounded-lg p-4">
-                                    <div class="text-gray-400 text-sm mb-2">الطلبات</div>
-                                    <div class="text-2xl font-bold text-white">١٢٤</div>
-                                    <div class="text-blue-400 text-sm mt-1">
-                                        <i class="fas fa-shopping-cart"></i> ١٤ منتظر
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Product Grid -->
-                            <div class="grid grid-cols-4 gap-2">
-                                <div class="bg-gray-800 rounded p-2 text-center">
-                                    <div class="text-gray-400 text-xs mb-1">منتج ١</div>
-                                    <div class="text-white text-sm font-bold">٩٩ ر.س</div>
-                                </div>
-                                <div class="bg-gray-800 rounded p-2 text-center">
-                                    <div class="text-gray-400 text-xs mb-1">منتج ٢</div>
-                                    <div class="text-white text-sm font-bold">١٤٩ ر.س</div>
-                                </div>
-                                <div class="bg-gray-800 rounded p-2 text-center">
-                                    <div class="text-gray-400 text-xs mb-1">منتج ٣</div>
-                                    <div class="text-white text-sm font-bold">٧٩ ر.س</div>
-                                </div>
-                                <div class="bg-gray-800 rounded p-2 text-center">
-                                    <div class="text-gray-400 text-xs mb-1">منتج ٤</div>
-                                    <div class="text-white text-sm font-bold">١٩٩ ر.س</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Floating Elements -->
-                    <div class="floating-element absolute -top-6 -right-6 bg-white p-4 rounded-2xl shadow-2xl">
-                        <div class="flex items-center">
-                            <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center">
-                                <i class="fas fa-chart-line text-green-600 text-2xl"></i>
-                            </div>
-                            <div class="mr-3">
-                                <div class="text-2xl font-bold text-gray-900">+٤٥٪</div>
-                                <div class="text-sm text-gray-600">نمو المبيعات</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-2xl">
-                        <div class="flex items-center relative">
-                            <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
-                                <i class="fas fa-bell text-blue-600 text-2xl"></i>
-                            </div>
-                            <div class="mr-3">
-                                <div class="text-2xl font-bold text-gray-900">٢٣</div>
-                                <div class="text-sm text-gray-600">تنبيهات جديدة</div>
-                            </div>
-                            <div class="notification-badge">٣</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                    مميزات النظام المتكامل
-                </h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    كل ما تحتاجه لإدارة متجرك بكفاءة واحترافية
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
-                <div class="feature-card bg-gray-50 rounded-2xl p-8 border border-gray-200 hover:border-blue-300">
-                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6">
-                        <i class="fas fa-cash-register text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">نقاط البيع السريعة</h3>
-                    <p class="text-gray-600 mb-6">
-                        واجهة بيع مصممة للسرعة مع دعم الباركود واللمس والاختصارات.
-                    </p>
-                    <ul class="space-y-3">
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            بيع سريع بالباركود
-                        </li>
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            عمل دون اتصال
-                        </li>
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            فواتير متعددة
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- Feature 2 -->
-                <div class="feature-card bg-gray-50 rounded-2xl p-8 border border-gray-200 hover:border-green-300">
-                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-6">
-                        <i class="fas fa-boxes text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">إدارة المخزون</h3>
-                    <p class="text-gray-600 mb-6">
-                        تتبع المخزون الفعلي مع تنبيهات النفاد وتقارير الحركة.
-                    </p>
-                    <ul class="space-y-3">
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            تتبع دقيق للمخزون
-                        </li>
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            تنبيهات النفاد
-                        </li>
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            إدارة الفروع
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- Feature 3 -->
-                <div class="feature-card bg-gray-50 rounded-2xl p-8 border border-gray-200 hover:border-purple-300">
-                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6">
-                        <i class="fas fa-calculator text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">محاسبة متكاملة</h3>
-                    <p class="text-gray-600 mb-6">
-                        نظام محاسبي كامل مع تقارير مالية وقوائم دخل وميزانيات.
-                    </p>
-                    <ul class="space-y-3">
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            دفتر أستاذ آلي
-                        </li>
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            تقارير مالية
-                        </li>
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            إدارة الضرائب
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Demo Section -->
-    <section id="demo" class="py-20 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                    شاهد النظام أثناء العمل
-                </h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    جولة سريعة في أبرز مميزات نظام إتقان بوس
-                </p>
-            </div>
-            
-            <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div class="aspect-video bg-gray-900 flex items-center justify-center">
-                    <div class="text-center">
-                        <div class="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 cursor-pointer hover:scale-105 transition-transform">
-                            <i class="fas fa-play text-white text-3xl"></i>
-                        </div>
-                        <p class="text-white text-xl">انقر للمشاهدة</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section id="pricing" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                    خطط الأسعار المناسبة
-                </h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    اختر الخطة التي تناسب حجم عملك
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <!-- Plan 1 -->
-                <div class="bg-gray-50 rounded-2xl p-8 border-2 border-gray-200">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">البداية</h3>
-                    <p class="text-gray-600 mb-6">لمتجرك الأول</p>
-                    <div class="mb-6">
-                        <span class="text-4xl font-bold text-gray-900">٩٩</span>
-                        <span class="text-gray-600">ر.س / شهريًا</span>
-                    </div>
-                    <a href="/signup?plan=starter" class="block w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl text-center font-semibold transition-colors mb-8">
-                        ابدأ مجانًا
-                    </a>
-                    <ul class="space-y-4">
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>فرع واحد</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>٣ مستخدمين</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>دعم فني</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- Plan 2 -->
-                <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-8 border-2 border-blue-500 relative transform scale-105 shadow-xl">
-                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                        <span class="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                            الأكثر شيوعًا
-                        </span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">المحترف</h3>
-                    <p class="text-gray-600 mb-6">للمتاجر المتوسطة</p>
-                    <div class="mb-6">
-                        <span class="text-4xl font-bold text-gray-900">١٩٩</span>
-                        <span class="text-gray-600">ر.س / شهريًا</span>
-                    </div>
-                    <a href="/signup?plan=professional" class="block w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90 text-white rounded-xl text-center font-semibold transition-all mb-8">
-                        ابدأ مجانًا
-                    </a>
-                    <ul class="space-y-4">
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>٣ فروع</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>١٠ مستخدمين</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>دعم فني متميز</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- Plan 3 -->
-                <div class="bg-gray-50 rounded-2xl p-8 border-2 border-gray-200">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">المؤسسات</h3>
-                    <p class="text-gray-600 mb-6">للشركات الكبيرة</p>
-                    <div class="mb-6">
-                        <span class="text-4xl font-bold text-gray-900">٤٩٩</span>
-                        <span class="text-gray-600">ر.س / شهريًا</span>
-                    </div>
-                    <a href="/contact?plan=enterprise" class="block w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl text-center font-semibold transition-colors mb-8">
-                        تواصل مع المبيعات
-                    </a>
-                    <ul class="space-y-4">
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>فروع غير محدودة</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>مستخدمين غير محدودين</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>دعم فني ٢٤/٧</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer id="contact" class="bg-gray-900 text-white pt-16 pb-8">
-        <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-4 gap-12 mb-12">
-                <div>
-                    <div class="flex items-center mb-6">
-                        <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-cash-register text-white"></i>
-                        </div>
-                        <div class="mr-3">
-                            <h3 class="text-xl font-bold">إتقان<span class="text-blue-400">بوس</span></h3>
-                        </div>
-                    </div>
-                    <p class="text-gray-400 mb-6">
-                        نظام سحابي متكامل لإدارة نقاط البيع والمحاسبة والمخزون.
-                    </p>
-                </div>
-                
-                <div>
-                    <h4 class="text-lg font-bold mb-6">روابط سريعة</h4>
-                    <ul class="space-y-3">
-                        <li><a href="#features" class="text-gray-400 hover:text-white">الميزات</a></li>
-                        <li><a href="#pricing" class="text-gray-400 hover:text-white">الأسعار</a></li>
-                        <li><a href="#demo" class="text-gray-400 hover:text-white">تجربة مجانية</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="text-lg font-bold mb-6">الدعم</h4>
-                    <ul class="space-y-3">
-                        <li><a href="/docs" class="text-gray-400 hover:text-white">التوثيق</a></li>
-                        <li><a href="/support" class="text-gray-400 hover:text-white">الدعم الفني</a></li>
-                        <li><a href="/contact" class="text-gray-400 hover:text-white">التواصل</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="text-lg font-bold mb-6">تواصل معنا</h4>
-                    <ul class="space-y-4">
-                        <li class="flex items-center">
-                            <i class="fas fa-phone text-blue-400 ml-3"></i>
-                            <span class="text-gray-400">٠٥٠٠٠٠٠٠٠٠</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-envelope text-blue-400 ml-3"></i>
-                            <span class="text-gray-400">info@itqanpos.com</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="border-t border-gray-800 pt-8 text-center">
-                <p class="text-gray-500">
-                    © ٢٠٢٤ إتقان بوس. جميع الحقوق محفوظة.
-                </p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- JavaScript -->
-    <script>
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-        
-        // Video play
-        document.querySelector('.fa-play').parentElement.addEventListener('click', function() {
-            this.innerHTML = '<i class="fas fa-spinner fa-spin text-white text-3xl"></i>';
-            setTimeout(() => {
-                alert('سيتم تشغيل الفيديو التوضيحي');
-                this.innerHTML = '<i class="fas fa-play text-white text-3xl"></i>';
-            }, 1000);
-        });
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إتقان بوس - نظام نقاط البيع المتكامل</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        * {
-            font-family: 'Cairo', sans-serif;
-        }
-        
-        .hero-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-            transition: transform 0.3s ease;
-        }
-        
-        .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-        }
-        
-        .floating-element {
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-        
-        .dashboard-preview {
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            border-radius: 20px;
-            overflow: hidden;
-        }
-        
-        .browser-bar {
-            background: #f1f5f9;
-            padding: 8px 16px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .browser-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-left: 6px;
-        }
-        
-        .notification-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #ef4444;
-            color: white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-        }
-    </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body>
     
-    <!-- Navigation -->
+    <!-- ==== شريط التنقل ==== -->
     <nav class="navbar">
-    <a href="index.html">الرئيسية</a>
-    <a href="dashboard.html">لوحة التحكم</a>
-    <a href="pages/pos.html">نقاط البيع</a>
-    <a href="pages/inventory.html">المخزون</a>
-</nav>
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3 space-x-reverse">
-                    <div class="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-cash-register text-white text-xl"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-900">إتقان<span class="text-blue-600">بوس</span></h1>
-                        <p class="text-xs text-gray-500">itqanpos.github.io</p>
-                    </div>
+        <div class="nav-container">
+            <!-- الشعار -->
+            <a href="#" class="nav-brand">
+                <div class="logo">
+                    <i class="fas fa-cash-register"></i>
                 </div>
-                
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex items-center space-x-8 space-x-reverse">
-                    <a href="#features" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">الميزات</a>
-                    <a href="#pricing" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">الأسعار</a>
-                    <a href="#demo" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">تجربة مجانية</a>
-                    <a href="#contact" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">التواصل</a>
-                </div>
-                
-                <!-- Auth Buttons -->
-                <div class="flex items-center space-x-4 space-x-reverse">
-                    <a href="/login" class="hidden md:inline text-gray-700 hover:text-blue-600 font-medium">
-                        تسجيل الدخول
-                    </a>
-                    <a href="/signup" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl hover:opacity-90 transition-all shadow-lg hover:shadow-xl font-medium">
-                        ابدأ مجاناً <i class="fas fa-arrow-left mr-2"></i>
-                    </a>
-                </div>
+                <h1>إتقان<span class="highlight">بوس</span></h1>
+            </a>
+            
+            <!-- القائمة -->
+            <div class="nav-menu" id="navMenu">
+                <a href="#" class="nav-link active">
+                    <i class="fas fa-home"></i> الرئيسية
+                </a>
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i> لوحة التحكم
+                </a>
+                <a href="#features" class="nav-link">
+                    <i class="fas fa-star"></i> الميزات
+                </a>
+                <a href="#pricing" class="nav-link">
+                    <i class="fas fa-tag"></i> الأسعار
+                </a>
+                <a href="#contact" class="nav-link">
+                    <i class="fas fa-phone"></i> التواصل
+                </a>
             </div>
+            
+            <!-- الأزرار -->
+            <div class="nav-actions">
+                <a href="login.html" class="btn btn-secondary">
+                    <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+                </a>
+                <a href="dashboard.html" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i> ابدأ مجانًا
+                </a>
+            </div>
+            
+            <!-- زر القائمة للموبايل -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero-gradient text-white pt-16 pb-24">
-        <div class="container mx-auto px-4">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
+    <!-- ==== قسم البطل ==== -->
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <!-- المحتوى -->
+            <div class="hero-content">
+                <h2>
+                    <i class="fas fa-users"></i> أكثر من 5,000 متجر يثقون بنا
+                </h2>
                 
-                <!-- Left Content -->
-                <div class="text-right">
-                    <!-- Badge -->
-                    <div class="inline-flex items-center px-4 py-2 bg-white/20 rounded-full backdrop-blur-sm mb-6">
-                        <i class="fas fa-users ml-2"></i>
-                        <span class="font-medium">أكثر من <span class="font-bold">5,000</span> متجر يثقون بنا</span>
+                <h1 class="fade-in">
+                    نظام نقاط بيع متكامل 
+                    <span class="highlight">لتحويل عملك التجاري</span>
+                </h1>
+                
+                <p class="fade-in delay-1">
+                    نظام سحابي شامل لإدارة المبيعات، المخزون، المحاسبة، والعملاء. 
+                    صمم خصيصًا للمتاجر والمطاعم والمؤسسات التجارية.
+                </p>
+                
+                <div class="hero-actions fade-in delay-2">
+                    <a href="dashboard.html" class="btn btn-primary btn-lg">
+                        <i class="fas fa-rocket"></i> ابدأ تجربتك المجانية
+                    </a>
+                    <a href="#demo" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-play-circle"></i> شاهد فيديو توضيحي
+                    </a>
+                </div>
+                
+                <!-- الإحصائيات -->
+                <div class="hero-stats fade-in delay-3">
+                    <div class="stat-item">
+                        <div class="stat-value">٩٩.٩٪</div>
+                        <div class="stat-label">توقيت تشغيل</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">+٥,٠٠٠</div>
+                        <div class="stat-label">عميل راضٍ</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">٢٤/٧</div>
+                        <div class="stat-label">دعم فني</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- لوحة العرض -->
+            <div class="hero-visual fade-in delay-2">
+                <div class="dashboard-preview">
+                    <!-- شريط المتصفح -->
+                    <div class="browser-bar">
+                        <div class="browser-dot dot-red"></div>
+                        <div class="browser-dot dot-yellow"></div>
+                        <div class="browser-dot dot-green"></div>
+                        <div class="browser-url">pospro.com/dashboard</div>
                     </div>
                     
-                    <!-- Main Heading -->
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-                        نظام نقاط بيع متكامل
-                        <span class="block text-blue-200">لتحويل عملك التجاري</span>
-                    </h1>
-                    
-                    <!-- Description -->
-                    <p class="text-xl text-blue-100 mb-10 max-w-2xl">
-                        نظام سحابي شامل لإدارة المبيعات، المخزون، المحاسبة، والعملاء. 
-                        صمم خصيصًا للمتاجر والمطاعم والمؤسسات التجارية.
-                    </p>
-                    
-                    <!-- CTA Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-4 justify-end mb-12">
-                        <a href="/signup" class="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-700 rounded-xl hover:bg-gray-100 transition-all shadow-xl text-lg font-bold">
-                            ابدأ تجربتك المجانية
-                            <i class="fas fa-arrow-left mr-3"></i>
-                        </a>
+                    <!-- محتوى اللوحة -->
+                    <div class="dashboard-content">
+                        <!-- الإحصائيات -->
+                        <div class="dashboard-stats">
+                            <div class="stat-box">
+                                <div class="stat-box-label">المبيعات اليوم</div>
+                                <div class="stat-box-value">٤٥,٢٠٠ ر.س</div>
+                                <div class="stat-box-change change-up">
+                                    <i class="fas fa-arrow-up"></i> +١٥٪ من الأمس
+                                </div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-box-label">الطلبات</div>
+                                <div class="stat-box-value">١٢٤</div>
+                                <div class="stat-box-change">
+                                    <i class="fas fa-shopping-cart"></i> ١٤ منتظر
+                                </div>
+                            </div>
+                        </div>
                         
-                        <a href="#demo" class="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-white text-white rounded-xl hover:bg-white/10 transition-all text-lg font-medium">
-                            <i class="fas fa-play-circle ml-3"></i>
-                            شاهد فيديو توضيحي
-                        </a>
+                        <!-- المنتجات -->
+                        <div class="products-grid">
+                            <div class="product-item">
+                                <div class="product-name">منتج ١</div>
+                                <div class="product-price">٩٩ ر.س</div>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-name">منتج ٢</div>
+                                <div class="product-price">١٤٩ ر.س</div>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-name">منتج ٣</div>
+                                <div class="product-price">٧٩ ر.س</div>
+                            </div>
+                            <div class="product-item">
+                                <div class="product-name">منتج ٤</div>
+                                <div class="product-price">١٩٩ ر.س</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- العناصر الطافية -->
+                <div class="floating-element floating-1">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 40px; height: 40px; background: #d1fae5; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-chart-line" style="color: #10b981;"></i>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.25rem; font-weight: 700;">+٤٥٪</div>
+                            <div style="font-size: 0.875rem; color: #6b7280;">نمو المبيعات</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="floating-element floating-2">
+                    <div style="display: flex; align-items: center; gap: 10px; position: relative;">
+                        <div style="width: 40px; height: 40px; background: #dbeafe; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-bell" style="color: #3b82f6;"></i>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.25rem; font-weight: 700;">٢٣</div>
+                            <div style="font-size: 0.875rem; color: #6b7280;">تنبيهات جديدة</div>
+                        </div>
+                        <div style="position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">
+                            ٣
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==== الميزات ==== -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <div class="section-header scroll-animate">
+                <h2>مميزات النظام المتكامل</h2>
+                <p>كل ما تحتاجه لإدارة متجرك بكفاءة واحترافية</p>
+            </div>
+            
+            <div class="features-grid">
+                <!-- ميزة 1 -->
+                <div class="feature-card feature-pos scroll-animate">
+                    <div class="feature-icon">
+                        <i class="fas fa-cash-register"></i>
+                    </div>
+                    <h3>نقاط البيع السريعة</h3>
+                    <p>واجهة بيع مصممة للسرعة مع دعم الباركود واللمس والاختصارات.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> بيع سريع بالباركود</li>
+                        <li><i class="fas fa-check"></i> عمل دون اتصال</li>
+                        <li><i class="fas fa-check"></i> فواتير متعددة</li>
+                    </ul>
+                </div>
+                
+                <!-- ميزة 2 -->
+                <div class="feature-card feature-inventory scroll-animate delay-1">
+                    <div class="feature-icon">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <h3>إدارة المخزون</h3>
+                    <p>تتبع المخزون الفعلي مع تنبيهات النفاد وتقارير الحركة.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> تتبع دقيق للمخزون</li>
+                        <li><i class="fas fa-check"></i> تنبيهات النفاد</li>
+                        <li><i class="fas fa-check"></i> إدارة الفروع</li>
+                    </ul>
+                </div>
+                
+                <!-- ميزة 3 -->
+                <div class="feature-card feature-accounting scroll-animate delay-2">
+                    <div class="feature-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h3>محاسبة متكاملة</h3>
+                    <p>نظام محاسبي كامل مع تقارير مالية وقوائم دخل وميزانيات.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> دفتر أستاذ آلي</li>
+                        <li><i class="fas fa-check"></i> تقارير مالية</li>
+                        <li><i class="fas fa-check"></i> إدارة الضرائب</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==== التجربة ==== -->
+    <section class="features" id="demo" style="background: white;">
+        <div class="features-container">
+            <div class="section-header scroll-animate">
+                <h2>شاهد النظام أثناء العمل</h2>
+                <p>جولة سريعة في أبرز مميزات نظام إتقان بوس</p>
+            </div>
+            
+            <div class="scroll-animate" style="max-width: 800px; margin: 0 auto;">
+                <div style="background: #1f2937; border-radius: 20px; overflow: hidden;">
+                    <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <div style="text-align: center;">
+                                <div style="width: 80px; height: 80px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; cursor: pointer; transition: transform 0.3s;" 
+                                     onmouseover="this.style.transform='scale(1.1)'" 
+                                     onmouseout="this.style.transform='scale(1)'"
+                                     onclick="showVideo()">
+                                    <i class="fas fa-play" style="color: #3b82f6; font-size: 2rem;"></i>
+                                </div>
+                                <div style="color: white; font-size: 1.25rem;">انقر للمشاهدة</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==== الأسعار ==== -->
+    <section class="pricing" id="pricing">
+        <div class="pricing-container">
+            <div class="section-header scroll-animate">
+                <h2>خطط الأسعار المناسبة</h2>
+                <p>اختر الخطة التي تناسب حجم عملك</p>
+            </div>
+            
+            <div class="pricing-grid">
+                <!-- الخطة 1 -->
+                <div class="pricing-card scroll-animate">
+                    <h3>البداية</h3>
+                    <p class="subtitle">لمتجرك الأول</p>
+                    
+                    <div class="price">
+                        ٩٩ <span class="price-period">ر.س / شهريًا</span>
                     </div>
                     
-                    <!-- Stats -->
-                    <div class="grid grid-cols-3 gap-6 max-w-xl mr-auto lg:mr-0">
-                        <div class="stat-card p-4 rounded-2xl text-center">
-                            <div class="text-3xl font-bold mb-1">٩٩.٩٪</div>
-                            <div class="text-sm text-blue-200">توقيت تشغيل</div>
-                        </div>
-                        <div class="stat-card p-4 rounded-2xl text-center">
-                            <div class="text-3xl font-bold mb-1">+٥,٠٠٠</div>
-                            <div class="text-sm text-blue-200">عميل راضٍ</div>
-                        </div>
-                        <div class="stat-card p-4 rounded-2xl text-center">
-                            <div class="text-3xl font-bold mb-1">٢٤/٧</div>
-                            <div class="text-sm text-blue-200">دعم فني</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Right Content - Dashboard Preview -->
-                <div class="relative">
-                    <div class="dashboard-preview bg-white">
-                        <!-- Browser Bar -->
-                        <div class="browser-bar flex items-center">
-                            <div>
-                                <span class="browser-dot bg-red-400"></span>
-                                <span class="browser-dot bg-yellow-400"></span>
-                                <span class="browser-dot bg-green-400"></span>
-                            </div>
-                            <div class="flex-1 text-center text-sm text-gray-500">
-                                pospro.com/dashboard
-                            </div>
-                        </div>
-                        
-                        <!-- Dashboard Content -->
-                        <div class="p-4 bg-gray-900">
-                            <div class="grid grid-cols-2 gap-4 mb-4">
-                                <div class="bg-gray-800 rounded-lg p-4">
-                                    <div class="text-gray-400 text-sm mb-2">المبيعات اليوم</div>
-                                    <div class="text-2xl font-bold text-white">٤٥,٢٠٠ ر.س</div>
-                                    <div class="text-green-400 text-sm mt-1">
-                                        <i class="fas fa-arrow-up"></i> +١٥٪ من الأمس
-                                    </div>
-                                </div>
-                                <div class="bg-gray-800 rounded-lg p-4">
-                                    <div class="text-gray-400 text-sm mb-2">الطلبات</div>
-                                    <div class="text-2xl font-bold text-white">١٢٤</div>
-                                    <div class="text-blue-400 text-sm mt-1">
-                                        <i class="fas fa-shopping-cart"></i> ١٤ منتظر
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Product Grid -->
-                            <div class="grid grid-cols-4 gap-2">
-                                <div class="bg-gray-800 rounded p-2 text-center">
-                                    <div class="text-gray-400 text-xs mb-1">منتج ١</div>
-                                    <div class="text-white text-sm font-bold">٩٩ ر.س</div>
-                                </div>
-                                <div class="bg-gray-800 rounded p-2 text-center">
-                                    <div class="text-gray-400 text-xs mb-1">منتج ٢</div>
-                                    <div class="text-white text-sm font-bold">١٤٩ ر.س</div>
-                                </div>
-                                <div class="bg-gray-800 rounded p-2 text-center">
-                                    <div class="text-gray-400 text-xs mb-1">منتج ٣</div>
-                                    <div class="text-white text-sm font-bold">٧٩ ر.س</div>
-                                </div>
-                                <div class="bg-gray-800 rounded p-2 text-center">
-                                    <div class="text-gray-400 text-xs mb-1">منتج ٤</div>
-                                    <div class="text-white text-sm font-bold">١٩٩ ر.س</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Floating Elements -->
-                    <div class="floating-element absolute -top-6 -right-6 bg-white p-4 rounded-2xl shadow-2xl">
-                        <div class="flex items-center">
-                            <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center">
-                                <i class="fas fa-chart-line text-green-600 text-2xl"></i>
-                            </div>
-                            <div class="mr-3">
-                                <div class="text-2xl font-bold text-gray-900">+٤٥٪</div>
-                                <div class="text-sm text-gray-600">نمو المبيعات</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-2xl">
-                        <div class="flex items-center relative">
-                            <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
-                                <i class="fas fa-bell text-blue-600 text-2xl"></i>
-                            </div>
-                            <div class="mr-3">
-                                <div class="text-2xl font-bold text-gray-900">٢٣</div>
-                                <div class="text-sm text-gray-600">تنبيهات جديدة</div>
-                            </div>
-                            <div class="notification-badge">٣</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                    مميزات النظام المتكامل
-                </h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    كل ما تحتاجه لإدارة متجرك بكفاءة واحترافية
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
-                <div class="feature-card bg-gray-50 rounded-2xl p-8 border border-gray-200 hover:border-blue-300">
-                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6">
-                        <i class="fas fa-cash-register text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">نقاط البيع السريعة</h3>
-                    <p class="text-gray-600 mb-6">
-                        واجهة بيع مصممة للسرعة مع دعم الباركود واللمس والاختصارات.
-                    </p>
-                    <ul class="space-y-3">
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            بيع سريع بالباركود
-                        </li>
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            عمل دون اتصال
-                        </li>
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            فواتير متعددة
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- Feature 2 -->
-                <div class="feature-card bg-gray-50 rounded-2xl p-8 border border-gray-200 hover:border-green-300">
-                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-6">
-                        <i class="fas fa-boxes text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">إدارة المخزون</h3>
-                    <p class="text-gray-600 mb-6">
-                        تتبع المخزون الفعلي مع تنبيهات النفاد وتقارير الحركة.
-                    </p>
-                    <ul class="space-y-3">
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            تتبع دقيق للمخزون
-                        </li>
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            تنبيهات النفاد
-                        </li>
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            إدارة الفروع
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- Feature 3 -->
-                <div class="feature-card bg-gray-50 rounded-2xl p-8 border border-gray-200 hover:border-purple-300">
-                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6">
-                        <i class="fas fa-calculator text-white text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">محاسبة متكاملة</h3>
-                    <p class="text-gray-600 mb-6">
-                        نظام محاسبي كامل مع تقارير مالية وقوائم دخل وميزانيات.
-                    </p>
-                    <ul class="space-y-3">
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            دفتر أستاذ آلي
-                        </li>
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            تقارير مالية
-                        </li>
-                        <li class="flex items-center text-gray-700">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            إدارة الضرائب
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Demo Section -->
-    <section id="demo" class="py-20 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                    شاهد النظام أثناء العمل
-                </h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    جولة سريعة في أبرز مميزات نظام إتقان بوس
-                </p>
-            </div>
-            
-            <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div class="aspect-video bg-gray-900 flex items-center justify-center">
-                    <div class="text-center">
-                        <div class="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 cursor-pointer hover:scale-105 transition-transform">
-                            <i class="fas fa-play text-white text-3xl"></i>
-                        </div>
-                        <p class="text-white text-xl">انقر للمشاهدة</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section id="pricing" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                    خطط الأسعار المناسبة
-                </h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                    اختر الخطة التي تناسب حجم عملك
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <!-- Plan 1 -->
-                <div class="bg-gray-50 rounded-2xl p-8 border-2 border-gray-200">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">البداية</h3>
-                    <p class="text-gray-600 mb-6">لمتجرك الأول</p>
-                    <div class="mb-6">
-                        <span class="text-4xl font-bold text-gray-900">٩٩</span>
-                        <span class="text-gray-600">ر.س / شهريًا</span>
-                    </div>
-                    <a href="/signup?plan=starter" class="block w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl text-center font-semibold transition-colors mb-8">
-                        ابدأ مجانًا
-                    </a>
-                    <ul class="space-y-4">
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>فرع واحد</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>٣ مستخدمين</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>دعم فني</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- Plan 2 -->
-                <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-8 border-2 border-blue-500 relative transform scale-105 shadow-xl">
-                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                        <span class="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                            الأكثر شيوعًا
-                        </span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">المحترف</h3>
-                    <p class="text-gray-600 mb-6">للمتاجر المتوسطة</p>
-                    <div class="mb-6">
-                        <span class="text-4xl font-bold text-gray-900">١٩٩</span>
-                        <span class="text-gray-600">ر.س / شهريًا</span>
-                    </div>
-                    <a href="/signup?plan=professional" class="block w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90 text-white rounded-xl text-center font-semibold transition-all mb-8">
-                        ابدأ مجانًا
-                    </a>
-                    <ul class="space-y-4">
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>٣ فروع</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>١٠ مستخدمين</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>دعم فني متميز</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- Plan 3 -->
-                <div class="bg-gray-50 rounded-2xl p-8 border-2 border-gray-200">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">المؤسسات</h3>
-                    <p class="text-gray-600 mb-6">للشركات الكبيرة</p>
-                    <div class="mb-6">
-                        <span class="text-4xl font-bold text-gray-900">٤٩٩</span>
-                        <span class="text-gray-600">ر.س / شهريًا</span>
-                    </div>
-                    <a href="/contact?plan=enterprise" class="block w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl text-center font-semibold transition-colors mb-8">
-                        تواصل مع المبيعات
-                    </a>
-                    <ul class="space-y-4">
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>فروع غير محدودة</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>مستخدمين غير محدودين</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-check text-green-500 ml-3"></i>
-                            <span>دعم فني ٢٤/٧</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer id="contact" class="bg-gray-900 text-white pt-16 pb-8">
-        <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-4 gap-12 mb-12">
-                <div>
-                    <div class="flex items-center mb-6">
-                        <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-cash-register text-white"></i>
-                        </div>
-                        <div class="mr-3">
-                            <h3 class="text-xl font-bold">إتقان<span class="text-blue-400">بوس</span></h3>
-                        </div>
-                    </div>
-                    <p class="text-gray-400 mb-6">
-                        نظام سحابي متكامل لإدارة نقاط البيع والمحاسبة والمخزون.
-                    </p>
-                </div>
-                
-                <div>
-                    <h4 class="text-lg font-bold mb-6">روابط سريعة</h4>
-                    <ul class="space-y-3">
-                        <li><a href="#features" class="text-gray-400 hover:text-white">الميزات</a></li>
-                        <li><a href="#pricing" class="text-gray-400 hover:text-white">الأسعار</a></li>
-                        <li><a href="#demo" class="text-gray-400 hover:text-white">تجربة مجانية</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="text-lg font-bold mb-6">الدعم</h4>
-                    <ul class="space-y-3">
-                        <li><a href="/docs" class="text-gray-400 hover:text-white">التوثيق</a></li>
-                        <li><a href="/support" class="text-gray-400 hover:text-white">الدعم الفني</a></li>
-                        <li><a href="/contact" class="text-gray-400 hover:text-white">التواصل</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="text-lg font-bold mb-6">تواصل معنا</h4>
-                    <ul class="space-y-4">
-                        <li class="flex items-center">
-                            <i class="fas fa-phone text-blue-400 ml-3"></i>
-                            <span class="text-gray-400">٠٥٠٠٠٠٠٠٠٠</span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-envelope text-blue-400 ml-3"></i>
-                            <span class="text-gray-400">info@itqanpos.com</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="border-t border-gray-800 pt-8 text-center">
-                <p class="text-gray-500">
-                    © ٢٠٢٤ إتقان بوس. جميع الحقوق محفوظة.
-                </p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- JavaScript -->
-    <script>
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-        
-        // Video play
-        document.querySelector('.fa-play').parentElement.addEventListener('click', function() {
-            this.innerHTML = '<i class="fas fa-spinner fa-spin text-white text-3xl"></i>';
-            setTimeout(() => {
-                alert('سيتم تشغيل الفيديو التوضيحي');
-                this.innerHTML = '<i class="fas fa-play text-white text-3xl"></i>';
-            }, 1000);
-        });
-    </script>
-</body>
-</html>
+                    <a href="dashboard.html?plan=starter" class="btn btn-secondary" style="width: 100%; justify-content: center
