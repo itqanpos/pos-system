@@ -1,373 +1,1047 @@
-<a href="dashboard.html?plan=starter" class="btn btn-secondary" style="width: 100%; justify-content: center; margin-bottom: 2rem;">
-                        ابدأ مجانًا
-                    </a>
-                    
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> فرع واحد</li>
-                        <li><i class="fas fa-check"></i> ٣ مستخدمين</li>
-                        <li><i class="fas fa-check"></i> دعم فني</li>
-                        <li class="feature-unavailable"><i class="fas fa-times"></i> المحاسبة المتكاملة</li>
-                        <li class="feature-unavailable"><i class="fas fa-times"></i> تطبيق الموبايل</li>
-                    </ul>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - إتقان بوس</title>
+    
+    <!-- إضافة الأنماط مباشرة هنا -->
+    <style>
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Cairo', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+        
+        body {
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* ========== NAVBAR ========== */
+        .navbar {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 1.5rem;
+            height: 64px;
+        }
+        
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+        
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+        
+        .nav-logo {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .nav-brand-text h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+        
+        .nav-brand-text .highlight {
+            color: var(--primary);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: var(--gray-600);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-link:hover {
+            background: var(--gray-100);
+            color: var(--primary);
+        }
+        
+        .nav-link.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .nav-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        .btn-outline {
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .notification-badge {
+            position: relative;
+            background: none;
+            border: none;
+            color: var(--gray-600);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 6px;
+        }
+        
+        .notification-badge:hover {
+            background: var(--gray-100);
+        }
+        
+        .badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--danger);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.125rem 0.375rem;
+            border-radius: 9999px;
+            min-width: 16px;
+            text-align: center;
+        }
+        
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            position: fixed;
+            top: 64px;
+            right: 0;
+            bottom: 0;
+            width: 240px;
+            background: white;
+            border-left: 1px solid var(--gray-200);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 1.5rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .user-details h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        .user-details p {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+        
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            color: var(--gray-600);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .sidebar-link:hover {
+            background: var(--gray-100);
+            color: var(--primary);
+        }
+        
+        .sidebar-link.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .sidebar-link i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            margin-right: 240px;
+            margin-top: 64px;
+            padding: 1.5rem;
+            min-height: calc(100vh - 64px);
+        }
+        
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+        
+        .dashboard-header p {
+            color: var(--gray-600);
+        }
+        
+        /* ========== STATS GRID ========== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .stat-icon.sales {
+            background: #dbeafe;
+            color: var(--primary);
+        }
+        
+        .stat-icon.orders {
+            background: #dcfce7;
+            color: var(--success);
+        }
+        
+        .stat-icon.customers {
+            background: #fef3c7;
+            color: var(--warning);
+        }
+        
+        .stat-icon.inventory {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+        
+        .stat-trend {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .trend-up {
+            color: var(--success);
+        }
+        
+        .trend-down {
+            color: var(--danger);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-detail {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+        
+        /* ========== CHARTS ========== */
+        .charts-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--gray-200);
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .chart-header h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        .chart-placeholder {
+            height: 300px;
+            background: var(--gray-100);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-500);
+        }
+        
+        /* ========== TABLE ========== */
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--gray-200);
+            margin-bottom: 2rem;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .table-header h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: var(--gray-50);
+            border-bottom: 2px solid var(--gray-200);
+        }
+        
+        th {
+            padding: 1rem;
+            text-align: right;
+            font-weight: 600;
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+        
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            color: var(--gray-700);
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        /* ========== QUICK ACTIONS ========== */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .action-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--gray-800);
+            border: 1px solid var(--gray-200);
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .action-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin: 0 auto 1rem;
+        }
+        
+        .action-pos {
+            background: #dbeafe;
+            color: var(--primary);
+        }
+        
+        .action-inventory {
+            background: #dcfce7;
+            color: var(--success);
+        }
+        
+        .action-customers {
+            background: #fef3c7;
+            color: var(--warning);
+        }
+        
+        .action-reports {
+            background: #f3e8ff;
+            color: var(--secondary);
+        }
+        
+        /* ========== FOOTER ========== */
+        .dashboard-footer {
+            background: white;
+            border-top: 1px solid var(--gray-200);
+            padding: 1.5rem;
+            margin-right: 240px;
+        }
+        
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .footer-links a {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .copyright {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+        
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 200px;
+            }
+            
+            .main-content {
+                margin-right: 200px;
+            }
+            
+            .dashboard-footer {
+                margin-right: 200px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            
+            .main-content {
+                margin-right: 0;
+            }
+            
+            .dashboard-footer {
+                margin-right: 0;
+            }
+            
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    
+    <!-- شريط التنقل العلوي -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- الشعار -->
+            <a href="index.html" class="nav-brand">
+                <div class="nav-logo">
+                    <i class="fas fa-cash-register"></i>
                 </div>
-                
-                <!-- الخطة 2 -->
-                <div class="pricing-card popular scroll-animate delay-1">
-                    <div class="pricing-badge">الأكثر شيوعًا</div>
-                    <h3>المحترف</h3>
-                    <p class="subtitle">للمتاجر المتوسطة</p>
-                    
-                    <div class="price">
-                        ١٩٩ <span class="price-period">ر.س / شهريًا</span>
-                    </div>
-                    
-                    <a href="dashboard.html?plan=professional" class="btn btn-primary" style="width: 100%; justify-content: center; margin-bottom: 2rem;">
-                        ابدأ مجانًا
-                    </a>
-                    
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> ٣ فروع</li>
-                        <li><i class="fas fa-check"></i> ١٠ مستخدمين</li>
-                        <li><i class="fas fa-check"></i> دعم فني متميز</li>
-                        <li><i class="fas fa-check"></i> المحاسبة المتكاملة</li>
-                        <li><i class="fas fa-check"></i> تطبيق الموبايل</li>
-                    </ul>
+                <div class="nav-brand-text">
+                    <h1>إتقان<span class="highlight">بوس</span></h1>
                 </div>
-                
-                <!-- الخطة 3 -->
-                <div class="pricing-card scroll-animate delay-2">
-                    <h3>المؤسسات</h3>
-                    <p class="subtitle">للشركات الكبيرة</p>
-                    
-                    <div class="price">
-                        ٤٩٩ <span class="price-period">ر.س / شهريًا</span>
+            </a>
+            
+            <!-- القائمة -->
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i> الرئيسية
+                </a>
+                <a href="dashboard.html" class="nav-link active">
+                    <i class="fas fa-tachometer-alt"></i> لوحة التحكم
+                </a>
+                <a href="#pos" class="nav-link">
+                    <i class="fas fa-cash-register"></i> نقاط البيع
+                </a>
+            </div>
+            
+            <!-- الأزرار والإشعارات -->
+            <div class="nav-actions">
+                <button class="notification-badge">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <a href="index.html" class="btn btn-outline">
+                    <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- الشريط الجانبي -->
+    <aside class="sidebar">
+        <!-- معلومات المستخدم -->
+        <div class="user-info">
+            <div class="user-avatar">أ</div>
+            <div class="user-details">
+                <h3>أحمد محمد</h3>
+                <p>مدير النظام</p>
+            </div>
+        </div>
+        
+        <!-- القائمة الجانبية -->
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="sidebar-link active">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>لوحة التحكم</span>
+            </a>
+            <a href="#pos" class="sidebar-link">
+                <i class="fas fa-cash-register"></i>
+                <span>نقاط البيع</span>
+            </a>
+            <a href="#inventory" class="sidebar-link">
+                <i class="fas fa-boxes"></i>
+                <span>المخزون</span>
+                <span class="badge" style="position: static; margin-right: auto;">13</span>
+            </a>
+            <a href="#customers" class="sidebar-link">
+                <i class="fas fa-users"></i>
+                <span>العملاء</span>
+                <span class="badge" style="position: static; margin-right: auto; background: var(--success);">+85</span>
+            </a>
+            <a href="#reports" class="sidebar-link">
+                <i class="fas fa-chart-bar"></i>
+                <span>التقارير</span>
+            </a>
+            <a href="#accounting" class="sidebar-link">
+                <i class="fas fa-calculator"></i>
+                <span>المحاسبة</span>
+            </a>
+            <a href="#settings" class="sidebar-link">
+                <i class="fas fa-cog"></i>
+                <span>الإعدادات</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="main-content">
+        <!-- العنوان -->
+        <div class="dashboard-header">
+            <h2><i class="fas fa-tachometer-alt"></i> لوحة التحكم الرئيسية</h2>
+            <p>مرحبًا أحمد، إليك نظرة عامة على أداء متجرك - تحديث لحظي</p>
+        </div>
+        
+        <!-- الإحصائيات السريعة -->
+        <div class="stats-grid">
+            <!-- المبيعات -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon sales">
+                        <i class="fas fa-shopping-cart"></i>
                     </div>
-                    
-                    <button class="btn btn-secondary" style="width: 100%; justify-content: center; margin-bottom: 2rem;" onclick="showContactForm()">
-                        تواصل مع المبيعات
-                    </button>
-                    
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> فروع غير محدودة</li>
-                        <li><i class="fas fa-check"></i> مستخدمين غير محدودين</li>
-                        <li><i class="fas fa-check"></i> دعم فني ٢٤/٧</li>
-                        <li><i class="fas fa-check"></i> API مخصص</li>
-                        <li><i class="fas fa-check"></i> تدريب مخصص</li>
-                    </ul>
+                    <span class="stat-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> +١٥.٥٪
+                    </span>
+                </div>
+                <div class="stat-value">٤٥,٢٠٠ ر.س</div>
+                <div class="stat-label">المبيعات اليوم</div>
+                <div class="stat-detail">مقارنة بالأمس: ٣٩,١٢٠ ر.س</div>
+            </div>
+            
+            <!-- الطلبات -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon orders">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <span class="stat-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> +٨.٢٪
+                    </span>
+                </div>
+                <div class="stat-value">١٢٤</div>
+                <div class="stat-label">الطلبات اليوم</div>
+                <div class="stat-detail">متوسط القيمة: ٣٦٥ ر.س</div>
+            </div>
+            
+            <!-- العملاء -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon customers">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <span class="stat-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> +٢٢.٣٪
+                    </span>
+                </div>
+                <div class="stat-value">٨٥</div>
+                <div class="stat-label">عملاء جدد</div>
+                <div class="stat-detail">إجمالي العملاء: ٢,٤٨٥</div>
+            </div>
+            
+            <!-- المخزون -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon inventory">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <span class="stat-trend trend-down">
+                        <i class="fas fa-exclamation-circle"></i> تنبيه
+                    </span>
+                </div>
+                <div class="stat-value">١٣</div>
+                <div class="stat-label">منتجات منخفضة</div>
+                <div class="stat-detail">
+                    <a href="#inventory" style="color: var(--danger); text-decoration: none;">عرض المنتجات</a>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- ==== الفوتر ==== -->
-    <footer id="contact">
-        <div class="footer-container">
-            <!-- الشعار والمعلومات -->
-            <div class="footer-brand">
-                <h3>إتقان<span class="highlight">بوس</span></h3>
-                <p>
-                    نظام سحابي متكامل لإدارة نقاط البيع والمحاسبة والمخزون 
-                    للمتاجر والمطاعم والمؤسسات التجارية.
-                </p>
-                <div class="social-links">
-                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+        
+        <!-- المخططات -->
+        <div class="charts-container">
+            <!-- مخطط المبيعات -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="fas fa-chart-line"></i> إحصائيات المبيعات</h3>
+                    <select style="padding: 0.5rem; border: 1px solid var(--gray-300); border-radius: 6px;">
+                        <option>آخر ٧ أيام</option>
+                        <option>آخر ٣٠ يوم</option>
+                    </select>
                 </div>
-            </div>
-            
-            <!-- روابط سريعة -->
-            <div class="footer-section">
-                <h4>روابط سريعة</h4>
-                <div class="footer-links">
-                    <a href="#home">الرئيسية</a>
-                    <a href="#features">الميزات</a>
-                    <a href="#pricing">الأسعار</a>
-                    <a href="#demo">التجربة</a>
-                    <a href="dashboard.html">لوحة التحكم</a>
-                </div>
-            </div>
-            
-            <!-- الدعم -->
-            <div class="footer-section">
-                <h4>الدعم</h4>
-                <div class="footer-links">
-                    <a href="#" onclick="showComingSoon('التوثيق')">التوثيق</a>
-                    <a href="#" onclick="showComingSoon('الدعم الفني')">الدعم الفني</a>
-                    <a href="#" onclick="showComingSoon('الأسئلة الشائعة')">الأسئلة الشائعة</a>
-                    <a href="#" onclick="showContactForm()">التواصل</a>
-                </div>
-            </div>
-            
-            <!-- التواصل -->
-            <div class="footer-section">
-                <h4>تواصل معنا</h4>
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>الرياض، المملكة العربية السعودية</span>
+                <div class="chart-placeholder" id="salesChart">
+                    <div style="text-align: center;">
+                        <i class="fas fa-chart-line" style="font-size: 3rem; color: var(--gray-400); margin-bottom: 1rem;"></i>
+                        <p>سيظهر مخطط المبيعات هنا</p>
                     </div>
-                    <div class="contact-item">
-                        <i class="fas fa-phone"></i>
-                        <span>٠٥٠٠٠٠٠٠٠٠</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <span>info@itqanpos.com</span>
+                </div>
+            </div>
+            
+            <!-- أفضل المنتجات -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="fas fa-star"></i> أفضل المنتجات</h3>
+                </div>
+                <div class="chart-placeholder" id="productsChart">
+                    <div style="text-align: center;">
+                        <i class="fas fa-chart-pie" style="font-size: 3rem; color: var(--gray-400); margin-bottom: 1rem;"></i>
+                        <p>سيظهر مخطط المنتجات هنا</p>
                     </div>
                 </div>
             </div>
         </div>
         
-        <div class="copyright">
-            © ٢٠٢٤ إتقان بوس. جميع الحقوق محفوظة.
+        <!-- الطلبات الحديثة -->
+        <div class="table-card">
+            <div class="table-header">
+                <h3><i class="fas fa-history"></i> الطلبات الحديثة</h3>
+                <a href="#orders" style="color: var(--primary); text-decoration: none;">عرض الكل →</a>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>رقم الفاتورة</th>
+                        <th>العميل</th>
+                        <th>المبلغ</th>
+                        <th>التاريخ</th>
+                        <th>الحالة</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#INV-2024-00124</td>
+                        <td>أحمد علي</td>
+                        <td>٤٥٠ ر.س</td>
+                        <td>١٥ يناير ٢٠٢٤</td>
+                        <td><span class="status-badge status-completed">مكتمل</span></td>
+                    </tr>
+                    <tr>
+                        <td>#INV-2024-00123</td>
+                        <td>محمد حسن</td>
+                        <td>١,٢٤٠ ر.س</td>
+                        <td>١٥ يناير ٢٠٢٤</td>
+                        <td><span class="status-badge status-completed">مكتمل</span></td>
+                    </tr>
+                    <tr>
+                        <td>#INV-2024-00122</td>
+                        <td>سارة محمد</td>
+                        <td>٨٩٠ ر.س</td>
+                        <td>١٤ يناير ٢٠٢٤</td>
+                        <td><span class="status-badge status-pending">معلق</span></td>
+                    </tr>
+                    <tr>
+                        <td>#INV-2024-00121</td>
+                        <td>خالد أحمد</td>
+                        <td>٣,٤٥٠ ر.س</td>
+                        <td>١٤ يناير ٢٠٢٤</td>
+                        <td><span class="status-badge status-cancelled">ملغي</span></td>
+                    </tr>
+                    <tr>
+                        <td>#INV-2024-00120</td>
+                        <td>فاطمة علي</td>
+                        <td>١,١٢٠ ر.س</td>
+                        <td>١٣ يناير ٢٠٢٤</td>
+                        <td><span class="status-badge status-completed">مكتمل</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- الإجراءات السريعة -->
+        <div class="quick-actions">
+            <a href="#pos" class="action-card">
+                <div class="action-icon action-pos">
+                    <i class="fas fa-cash-register"></i>
+                </div>
+                <h4>بدء عملية بيع</h4>
+                <p>افتح واجهة البيع السريع</p>
+            </a>
+            
+            <a href="#inventory" class="action-card">
+                <div class="action-icon action-inventory">
+                    <i class="fas fa-box"></i>
+                </div>
+                <h4>إدارة المخزون</h4>
+                <p>تتبع المنتجات والمستودعات</p>
+            </a>
+            
+            <a href="#customers" class="action-card">
+                <div class="action-icon action-customers">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h4>إضافة عميل</h4>
+                <p>تسجيل عميل جديد للنظام</p>
+            </a>
+            
+            <a href="#reports" class="action-card">
+                <div class="action-icon action-reports">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <h4>تقرير مبيعات</h4>
+                <p>إنشاء تقارير مفصلة</p>
+            </a>
+        </div>
+    </main>
+
+    <!-- الفوتر -->
+    <footer class="dashboard-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">الرئيسية</a>
+                <a href="#privacy">سياسة الخصوصية</a>
+                <a href="#terms">الشروط والأحكام</a>
+                <a href="#contact">التواصل</a>
+            </div>
+            <div class="copyright">
+                © ٢٠٢٤ إتقان بوس. جميع الحقوق محفوظة.
+            </div>
         </div>
     </footer>
 
-    <!-- ==== نافذة الفيديو ==== -->
-    <div id="videoModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center;">
-        <div style="background: white; border-radius: 16px; padding: 2rem; max-width: 800px; width: 90%; position: relative;">
-            <button onclick="closeVideo()" style="position: absolute; top: 1rem; left: 1rem; background: none; border: none; font-size: 1.5rem; color: #6b7280; cursor: pointer;">
-                <i class="fas fa-times"></i>
-            </button>
-            <h3 style="margin-bottom: 1.5rem; text-align: center;">جولة سريعة في نظام إتقان بوس</h3>
-            <div style="position: relative; padding-bottom: 56.25%; height: 0;">
-                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #1f2937; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <div style="text-align: center; color: white;">
-                        <i class="fas fa-play-circle" style="font-size: 4rem; margin-bottom: 1rem;"></i>
-                        <p>ستتوفر النسخة الكاملة قريبًا</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==== نموذج التواصل ==== -->
-    <div id="contactModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); z-index: 2000; justify-content: center; align-items: center;">
-        <div style="background: white; border-radius: 16px; padding: 2rem; max-width: 500px; width: 90%; position: relative;">
-            <button onclick="closeContactForm()" style="position: absolute; top: 1rem; left: 1rem; background: none; border: none; font-size: 1.5rem; color: #6b7280; cursor: pointer;">
-                <i class="fas fa-times"></i>
-            </button>
-            
-            <h3 style="margin-bottom: 1.5rem; text-align: center;">تواصل مع فريق المبيعات</h3>
-            
-            <form id="contactForm" style="display: flex; flex-direction: column; gap: 1rem;">
-                <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">الاسم الكامل</label>
-                    <input type="text" style="width: 100%; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 8px;" required>
-                </div>
-                
-                <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">البريد الإلكتروني</label>
-                    <input type="email" style="width: 100%; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 8px;" required>
-                </div>
-                
-                <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">رقم الهاتف</label>
-                    <input type="tel" style="width: 100%; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 8px;" required>
-                </div>
-                
-                <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">نوع المشروع</label>
-                    <select style="width: 100%; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 8px;">
-                        <option>متجر تجزئة</option>
-                        <option>مطعم أو مقهى</option>
-                        <option>مؤسسة تجارية</option>
-                        <option>شركة خدمات</option>
-                        <option>أخرى</option>
-                    </select>
-                </div>
-                
-                <div>
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">الرسالة</label>
-                    <textarea rows="4" style="width: 100%; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 8px;"></textarea>
-                </div>
-                
-                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                    <i class="fas fa-paper-plane"></i> إرسال الطلب
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ==== JavaScript ==== -->
+    <!-- JavaScript -->
     <script>
-        // 1. تبديل القائمة المتنقلة
-        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
-            document.getElementById('navMenu').classList.toggle('active');
-        });
-        
-        // 2. إغلاق القائمة عند النقر على رابط
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function() {
-                document.getElementById('navMenu').classList.remove('active');
-                
-                // تحديث الرابط النشط
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-                
-                // تمرير ناعم للروابط
-                const targetId = this.getAttribute('href');
-                if (targetId.startsWith('#')) {
-                    event.preventDefault();
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
+        // 1. تهيئة المخططات
+        document.addEventListener('DOMContentLoaded', function() {
+            // إنشاء مخطط المبيعات
+            const salesCtx = document.createElement('canvas');
+            salesCtx.id = 'salesChartCanvas';
+            document.getElementById('salesChart').innerHTML = '';
+            document.getElementById('salesChart').appendChild(salesCtx);
+            
+            const salesChart = new Chart(salesCtx, {
+                type: 'line',
+                data: {
+                    labels: ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
+                    datasets: [{
+                        label: 'المبيعات (ر.س)',
+                        data: [32000, 38000, 41000, 42800, 45200, 44500, 46000],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString('ar-SA') + ' ر.س';
+                                }
+                            }
+                        }
                     }
                 }
             });
-        });
-        
-        // 3. إظهار الفيديو
-        function showVideo() {
-            document.getElementById('videoModal').style.display = 'flex';
-        }
-        
-        function closeVideo() {
-            document.getElementById('videoModal').style.display = 'none';
-        }
-        
-        // 4. إظهار نموذج التواصل
-        function showContactForm() {
-            document.getElementById('contactModal').style.display = 'flex';
-        }
-        
-        function closeContactForm() {
-            document.getElementById('contactModal').style.display = 'none';
-        }
-        
-        // 5. معالجة نموذج التواصل
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('شكراً لتواصلك! سيتصل بك فريق المبيعات خلال 24 ساعة.');
-            closeContactForm();
-            // هنا يمكنك إضافة إرسال النموذج لخادم
-        });
-        
-        // 6. إشعار للصفحات قيد التطوير
-        function showComingSoon(feature) {
-            alert(`⚠️ ${feature} - قيد التطوير\nهذه الميزة قيد التطوير وسيتم إضافتها قريبًا.`);
-            return false;
-        }
-        
-        // 7. تحريك الرسوم المتحركة عند التمرير
-        function animateOnScroll() {
-            const elements = document.querySelectorAll('.scroll-animate');
             
-            elements.forEach(element => {
-                const elementTop = element.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
+            // إنشاء مخطط المنتجات
+            const productsCtx = document.createElement('canvas');
+            productsCtx.id = 'productsChartCanvas';
+            document.getElementById('productsChart').innerHTML = '';
+            document.getElementById('productsChart').appendChild(productsCtx);
+            
+            const productsChart = new Chart(productsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['إلكترونيات', 'ملابس', 'عطور', 'كتب', 'أخرى'],
+                    datasets: [{
+                        data: [35, 25, 20, 15, 5],
+                        backgroundColor: [
+                            '#3b82f6',
+                            '#10b981',
+                            '#8b5cf6',
+                            '#f59e0b',
+                            '#6b7280'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            rtl: true
+                        }
+                    }
+                }
+            });
+            
+            // 2. تحديث الإحصائيات كل 30 ثانية
+            function updateStats() {
+                const stats = [
+                    { element: '.sales .stat-value', min: 40000, max: 50000 },
+                    { element: '.orders .stat-value', min: 100, max: 200 },
+                    { element: '.customers .stat-value', min: 50, max: 150 }
+                ];
                 
-                if (elementTop < windowHeight - 100) {
-                    element.classList.add('visible');
-                }
-            });
-        }
-        
-        // 8. تحديث الإحصائيات بشكل عشوائي
-        function updateStats() {
-            const stats = [
-                { element: '.hero-stats .stat-item:nth-child(1) .stat-value', min: 99.8, max: 100 },
-                { element: '.hero-stats .stat-item:nth-child(2) .stat-value', min: 5000, max: 5500 },
-                { element: '.hero-stats .stat-item:nth-child(3) .stat-value', value: '٢٤/٧' }
-            ];
-            
-            stats.forEach(stat => {
-                if (stat.value) {
-                    document.querySelector(stat.element).textContent = stat.value;
-                } else {
-                    const randomValue = (Math.random() * (stat.max - stat.min) + stat.min).toFixed(1);
-                    document.querySelector(stat.element).textContent = stat.min === 99.8 ? 
-                        `${randomValue}%` : `+${Math.floor(randomValue).toLocaleString('ar-SA')}`;
-                }
-            });
-            
-            // تحديث إحصائيات العرض
-            const sales = Math.floor(Math.random() * 10000) + 40000;
-            const orders = Math.floor(Math.random() * 50) + 100;
-            
-            document.querySelector('.dashboard-stats .stat-box:nth-child(1) .stat-box-value').textContent = 
-                `${sales.toLocaleString('ar-SA')} ر.س`;
-            document.querySelector('.dashboard-stats .stat-box:nth-child(2) .stat-box-value').textContent = 
-                orders.toLocaleString('ar-SA');
-        }
-        
-        // 9. التهيئة عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', function() {
-            // تحريك الرسوم المتحركة
-            animateOnScroll();
-            
-            // تحديث الإحصائيات كل 10 ثواني
-            updateStats();
-            setInterval(updateStats, 10000);
-            
-            // إضافة تأثيرات للعناصر الطافية
-            const floatingElements = document.querySelectorAll('.floating-element');
-            floatingElements.forEach((element, index) => {
-                element.style.animationDelay = `${index * 2}s`;
-            });
-            
-            // إغلاق الفيديو عند النقر خارج النافذة
-            document.getElementById('videoModal').addEventListener('click', function(e) {
-                if (e.target === this) closeVideo();
-            });
-            
-            // إغلاق نموذج التواصل عند النقر خارج النافذة
-            document.getElementById('contactModal').addEventListener('click', function(e) {
-                if (e.target === this) closeContactForm();
-            });
-        });
-        
-        // 10. استماع لحدث التمرير
-        window.addEventListener('scroll', animateOnScroll);
-        
-        // 11. تحديث الرابط النشط أثناء التمرير
-        window.addEventListener('scroll', function() {
-            const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('.nav-link');
-            
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (scrollY >= (sectionTop - 100)) {
-                    current = section.getAttribute('id');
-                }
-            });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${current}` || 
-                    (current === '' && link.getAttribute('href') === '#home')) {
-                    link.classList.add('active');
-                }
-            });
-        });
-        
-        // 12. تأثيرات إضافية عند التمرير
-        let lastScroll = 0;
-        window.addEventListener('scroll', function() {
-            const currentScroll = window.pageYOffset;
-            const navbar = document.querySelector('.navbar');
-            
-            if (currentScroll > lastScroll && currentScroll > 100) {
-                navbar.style.transform = 'translateY(-100%)';
-            } else {
-                navbar.style.transform = 'translateY(0)';
+                stats.forEach(stat => {
+                    const randomValue = Math.floor(Math.random() * (stat.max - stat.min + 1)) + stat.min;
+                    const element = document.querySelector(stat.element);
+                    if (element) {
+                        element.textContent = stat.element.includes('sales') 
+                            ? randomValue.toLocaleString('ar-SA') + ' ر.س'
+                            : randomValue.toLocaleString('ar-SA');
+                    }
+                });
             }
             
-            lastScroll = currentScroll;
+            setInterval(updateStats, 30000);
+            
+            // 3. إضافة تأثيرات تفاعلية
+            document.querySelectorAll('.action-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-4px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // 4. تنبيهات
+            document.querySelector('.notification-badge').addEventListener('click', function() {
+                alert('لديك 3 تنبيهات جديدة:\n1. عملية بيع كبيرة\n2. تنبيه مخزون\n3. عميل جديد');
+            });
+            
+            // 5. تحديث الوقت
+            function updateTime() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('ar-SA');
+                const dateString = now.toLocaleDateString('ar-SA');
+                
+                // يمكنك إضافة عنصر لعرض الوقت إذا أردت
+                console.log('الوقت الحالي:', timeString, dateString);
+            }
+            
+            updateTime();
+            setInterval(updateTime, 60000);
         });
-        
-        // 13. تحميل بيانات حقيقية (محاكاة)
-        function loadRealData() {
-            // هنا يمكنك إضافة اتصال API لتحميل بيانات حقيقية
-            console.log('جاري تحميل البيانات...');
-        }
     </script>
 </body>
 </html>
