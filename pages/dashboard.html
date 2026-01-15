@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - إتقان بوس</title>
+    
+    <!-- استيراد نفس أنماط الصفحة الرئيسية -->
+    <style>
+        /* أنماط الصفحة الرئيسية التي تحتويها */
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f9fafb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Cairo', sans-serif;
+        }
+        
+        body {
+            background-color: #f9fafb;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+        
+        /* ==== الشريط العلوي ==== */
+        .navbar {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 2rem;
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+        
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .nav-brand .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .nav-brand h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        
+        .nav-brand .highlight {
+            color: #3b82f6;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: #3b82f6;
+            background: #eff6ff;
+        }
+        
+        .nav-link.active {
+            color: #3b82f6;
+            background: #eff6ff;
+        }
+        
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 0.625rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
+        }
+        
+        .btn-outline {
+            background: white;
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+        }
+        
+        .btn-outline:hover {
+            background: #eff6ff;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #6b7280;
+            cursor: pointer;
+        }
+        
+        /* ==== لوحة التحكم الرئيسية ==== */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 100px auto 2rem;
+            padding: 0 2rem;
+        }
+        
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .dashboard-header p {
+            color: #6b7280;
+        }
+        
+        /* ==== إحصائيات سريعة ==== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: #3b82f6;
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .sales .stat-icon { background: #dbeafe; color: #1d4ed8; }
+        .orders .stat-icon { background: #dcfce7; color: #15803d; }
+        .customers .stat-icon { background: #fef3c7; color: #b45309; }
+        .inventory .stat-icon { background: #fee2e2; color: #b91c1c; }
+        
+        .stat-trend {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .trend-up { color: #10b981; }
+        .trend-down { color: #ef4444; }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        /* ==== المخططات ==== */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .chart-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+        
+        /* ==== الجدول ==== */
+        .recent-orders {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            margin-bottom: 2rem;
+        }
+        
+        .recent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .recent-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #f9fafb;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        th {
+            padding: 1rem;
+            text-align: right;
+            font-weight: 600;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            color: #1f2937;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .status-completed { background: #d1fae5; color: #065f46; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-cancelled { background: #fee2e2; color: #991b1b; }
+        
+        /* ==== إجراءات سريعة ==== */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .action-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: #1f2937;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .action-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.1);
+        }
+        
+        .action-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .action-pos { background: #dbeafe; color: #1d4ed8; }
+        .action-inventory { background: #dcfce7; color: #15803d; }
+        .action-customers { background: #fef3c7; color: #b45309; }
+        .action-reports { background: #f3e8ff; color: #7c3aed; }
+        
+        .action-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .action-card p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        /* ==== الفوتر ==== */
+        footer {
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-section h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: #6b7280;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #3b82f6;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        /* ==== Dark Mode ==== */
+        .dark-mode body {
+            background: #111827;
+            color: #f9fafb;
+        }
+        
+        .dark-mode .navbar,
+        .dark-mode .stat-card,
+        .dark-mode .chart-card,
+        .dark-mode .recent-orders,
+        .dark-mode .action-card,
+        .dark-mode footer {
+            background: #1f2937;
+            border-color: #374151;
+        }
+        
+        .dark-mode .nav-link,
+        .dark-mode .footer-links a,
+        .dark-mode .copyright {
+            color: #d1d5db;
+        }
+        
+        .dark-mode .stat-value,
+        .dark-mode th,
+        .dark-mode td {
+            color: #f9fafb;
+        }
+        
+        .dark-mode .stat-label {
+            color: #9ca3af;
+        }
+        
+        .dark-mode thead {
+            background: #374151;
+        }
+        
+        /* ==== Responsive ==== */
+        @media (max-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 1rem;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .nav-actions {
+                display: none;
+            }
+            
+            .dashboard-container {
+                margin-top: 80px;
+                padding: 0 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ==== Chart Styles ==== */
+        .chart-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-style: italic;
+        }
+        
+        /* ==== Notification Badge ==== */
+        .notification-badge {
+            position: relative;
+        }
+        
+        .badge {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            background: #ef4444;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 9999px;
+            min-width: 20px;
+            text-align: center;
+        }
+    </style>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    
+    <!-- ==== شريط التنقل ==== -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- الشعار مع رابط للرئيسية -->
+            <a href="https://itqanpos.github.io/pos-system/" class="nav-brand">
+                <div class="logo">
+                    <i class="fas fa-cash-register"></i>
+                </div>
+                <h1>إتقان<span class="highlight">بوس</span></h1>
+            </a>
+            
+            <!-- القائمة -->
+            <div class="nav-menu" id="navMenu">
+                <a href="https://itqanpos.github.io/pos-system/" class="nav-link">
+                    <i class="fas fa-home"></i> الرئيسية
+                </a>
+                <a href="#" class="nav-link active">
+                    <i class="fas fa-tachometer-alt"></i> لوحة التحكم
+                </a>
+                <a href="#pos" class="nav-link" onclick="showComingSoon('نقاط البيع')">
+                    <i class="fas fa-cash-register"></i> نقاط البيع
+                </a>
+                <a href="#inventory" class="nav-link" onclick="showComingSoon('المخزون')">
+                    <i class="fas fa-boxes"></i> المخزون
+                </a>
+                <a href="#reports" class="nav-link" onclick="showComingSoon('التقارير')">
+                    <i class="fas fa-chart-bar"></i> التقارير
+                </a>
+                <a href="#customers" class="nav-link" onclick="showComingSoon('العملاء')">
+                    <i class="fas fa-users"></i> العملاء
+                </a>
+            </div>
+            
+            <!-- الأزرار -->
+            <div class="nav-actions">
+                <button class="btn btn-outline" onclick="toggleDarkMode()">
+                    <i class="fas fa-moon"></i> الوضع المظلم
+                </button>
+                <a href="https://itqanpos.github.io/pos-system/#pricing" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i> ابدأ مجانًا
+                </a>
+                <div class="notification-badge">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </div>
+            </div>
+            
+            <!-- زر القائمة للموبايل -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ==== لوحة التحكم الرئيسية ==== -->
+    <main class="dashboard-container">
+        <!-- العنوان -->
+        <div class="dashboard-header">
+            <h2><i class="fas fa-tachometer-alt"></i> لوحة التحكم الرئيسية</h2>
+            <p>مرحبًا أحمد، إليك نظرة عامة على أداء متجرك - تحديث لحظي</p>
+        </div>
+        
+        <!-- الإحصائيات السريعة -->
+        <div class="stats-grid">
+            <!-- المبيعات -->
+            <div class="stat-card sales">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <span class="stat-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> +١٥.٥٪
+                    </span>
+                </div>
+                <div class="stat-value">٤٥,٢٠٠ ر.س</div>
+                <div class="stat-label">المبيعات اليوم</div>
+                <div class="stat-detail">مقارنة بالأمس: ٣٩,١٢٠ ر.س</div>
+            </div>
+            
+            <!-- الطلبات -->
+            <div class="stat-card orders">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <span class="stat-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> +٨.٢٪
+                    </span>
+                </div>
+                <div class="stat-value">١٢٤</div>
+                <div class="stat-label">الطلبات اليوم</div>
+                <div class="stat-detail">متوسط القيمة: ٣٦٥ ر.س</div>
+            </div>
+            
+            <!-- العملاء -->
+            <div class="stat-card customers">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <span class="stat-trend trend-up">
+                        <i class="fas fa-arrow-up"></i> +٢٢.٣٪
+                    </span>
+                </div>
+                <div class="stat-value">٨٥</div>
+                <div class="stat-label">عملاء جدد</div>
+                <div class="stat-detail">إجمالي العملاء: ٢,٤٨٥</div>
+            </div>
+            
+            <!-- المخزون -->
+            <div class="stat-card inventory">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <span class="stat-trend trend-down">
+                        <i class="fas fa-exclamation-circle"></i> تنبيه
+                    </span>
+                </div>
+                <div class="stat-value">١٣</div>
+                <div class="stat-label">منتجات منخفضة</div>
+                <div class="stat-detail">
+                    <a href="#inventory" onclick="showComingSoon('المخزون')">عرض المنتجات</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- المخططات -->
+        <div class="charts-grid">
+            <!-- مخطط المبيعات -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="fas fa-chart-line"></i> إحصائيات المبيعات</h3>
+                    <select id="chartPeriod" onchange="updateChart()">
+                        <option value="week">آخر ٧ أيام</option>
+                        <option value="month">آخر ٣٠ يوم</option>
+                        <option value="year">هذا العام</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- أفضل المنتجات -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="fas fa-star"></i> أفضل المنتجات</h3>
+                    <a href="#reports" onclick="showComingSoon('التقارير')">عرض الكل →</a>
+                </div>
+                <div class="chart-container">
+                    <canvas id="productsChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- الطلبات الحديثة -->
+        <div class="recent-orders">
+            <div class="recent-header">
+                <h3><i class="fas fa-history"></i> الطلبات الحديثة</h3>
+                <a href="#orders" onclick="showComingSoon('الطلبات')">عرض الكل →</a>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>رقم الفاتورة</th>
+                            <th>العميل</th>
+                            <th>المبلغ</th>
+                            <th>التاريخ</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#INV-2024-00124</td>
+                            <td>أحمد علي</td>
+                            <td>٤٥٠ ر.س</td>
+                            <td>١٥ يناير ٢٠٢٤</td>
+                            <td><span class="status-badge status-completed">مكتمل</span></td>
+                        </tr>
+                        <tr>
+                            <td>#INV-2024-00123</td>
+                            <td>محمد حسن</td>
+                            <td>١,٢٤٠ ر.س</td>
+                            <td>١٥ يناير ٢٠٢٤</td>
+                            <td><span class="status-badge status-completed">مكتمل</span></td>
+                        </tr>
+                        <tr>
+                            <td>#INV-2024-00122</td>
+                            <td>سارة محمد</td>
+                            <td>٨٩٠ ر.س</td>
+                            <td>١٤ يناير ٢٠٢٤</td>
+                            <td><span class="status-badge status-pending">معلق</span></td>
+                        </tr>
+                        <tr>
+                            <td>#INV-2024-00121</td>
+                            <td>خالد أحمد</td>
+                            <td>٣,٤٥٠ ر.س</td>
+                            <td>١٤ يناير ٢٠٢٤</td>
+                            <td><span class="status-badge status-cancelled">ملغي</span></td>
+                        </tr>
+                        <tr>
+                            <td>#INV-2024-00120</td>
+                            <td>فاطمة علي</td>
+                            <td>١,١٢٠ ر.س</td>
+                            <td>١٣ يناير ٢٠٢٤</td>
+                            <td><span class="status-badge status-completed">مكتمل</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- الإجراءات السريعة -->
+        <div class="quick-actions">
+            <a href="#pos" class="action-card" onclick="showComingSoon('نقاط البيع')">
+                <div class="action-icon action-pos">
+                    <i class="fas fa-cash-register"></i>
+                </div>
+                <h4>بدء عملية بيع</h4>
+                <p>افتح واجهة البيع السريع</p>
+            </a>
+            
+            <a href="#inventory" class="action-card" onclick="showComingSoon('المخزون')">
+                <div class="action-icon action-inventory">
+                    <i class="fas fa-box"></i>
+                </div>
+                <h4>إدارة المخزون</h4>
+                <p>تتبع المنتجات والمستودعات</p>
+            </a>
+            
+            <a href="#customers" class="action-card" onclick="showComingSoon('العملاء')">
+                <div class="action-icon action-customers">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h4>إضافة عميل</h4>
+                <p>تسجيل عميل جديد للنظام</p>
+            </a>
+            
+            <a href="#reports" class="action-card" onclick="showComingSoon('التقارير')">
+                <div class="action-icon action-reports">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <h4>تقرير مبيعات</h4>
+                <p>إنشاء تقارير مفصلة</p>
+            </a>
+        </div>
+    </main>
+
+    <!-- ==== الفوتر ==== -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>إتقان بوس</h4>
+                <p>نظام سحابي متكامل لإدارة نقاط البيع والمحاسبة والمخزون للمؤسسات التجارية.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h4>روابط سريعة</h4>
+                <div class="footer-links">
+                    <a href="https://itqanpos.github.io/pos-system/">الرئيسية</a>
+                    <a href="https://itqanpos.github.io/pos-system/#features">الميزات</a>
+                    <a href="https://itqanpos.github.io/pos-system/#pricing">الأسعار</a>
+                    <a href="https://itqanpos.github.io/pos-system/#demo">التجربة</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4>الدعم</h4>
+                <div class="footer-links">
+                    <a href="#docs" onclick="showComingSoon('التوثيق')">التوثيق</a>
+                    <a href="#support" onclick="showComingSoon('الدعم')">الدعم الفني</a>
+                    <a href="#contact" onclick="showComingSoon('التواصل')">التواصل</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4>تواصل معنا</h4>
+                <div class="footer-links">
+                    <a href="tel:+966500000000">
+                        <i class="fas fa-phone"></i> ٠٥٠٠٠٠٠٠٠٠
+                    </a>
+                    <a href="mailto:info@itqanpos.com">
+                        <i class="fas fa-envelope"></i> info@itqanpos.com
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            © ٢٠٢٤ إتقان بوس. جميع الحقوق محفوظة.
+        </div>
+    </footer>
+
+    <!-- ==== JavaScript ==== -->
+    <script>
+        // 1. تهيئة المخططات
+        let salesChart, productsChart;
+        
+        function initCharts() {
+            // مخطط المبيعات
+            const salesCtx = document.getElementById('salesChart').getContext('2d');
+            salesChart = new Chart(salesCtx, {
+                type: 'line',
+                data: {
+                    labels: ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
+                    datasets: [{
+                        label: 'المبيعات (ر.س)',
+                        data: [32000, 38000, 41000, 42800, 45200, 44500, 46000],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString('ar-SA') + ' ر.س';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // مخطط المنتجات
+            const productsCtx = document.getElementById('productsChart').getContext('2d');
+            productsChart = new Chart(productsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['إلكترونيات', 'ملابس', 'عطور', 'كتب', 'أخرى'],
+                    datasets: [{
+                        data: [35, 25, 20, 15, 5],
+                        backgroundColor: [
+                            '#3b82f6',
+                            '#10b981',
+                            '#8b5cf6',
+                            '#f59e0b',
+                            '#6b7280'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            rtl: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 2. تحديث المخططات
+        function updateChart() {
+            const period = document.getElementById('chartPeriod').value;
+            
+            // تحديث بيانات المخطط حسب الفترة
+            let newData;
+            if (period === 'week') {
+                newData = [32000, 38000, 41000, 42800, 45200, 44500, 46000];
+            } else if (period === 'month') {
+                newData = Array.from({length: 30}, () => Math.floor(Math.random() * 50000) + 20000);
+            } else {
+                newData = Array.from({length: 12}, () => Math.floor(Math.random() * 150000) + 80000);
+            }
+            
+            salesChart.data.datasets[0].data = newData;
+            salesChart.update();
+        }
+        
+        // 3. تبديل القائمة المتنقلة
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+        
+        // 4. تبديل الوضع المظلم
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const btn = document.querySelector('[onclick="toggleDarkMode()"]');
+            const icon = btn.querySelector('i');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                icon.className = 'fas fa-sun';
+                btn.innerHTML = '<i class="fas fa-sun"></i> الوضع الفاتح';
+            } else {
+                icon.className = 'fas fa-moon';
+                btn.innerHTML = '<i class="fas fa-moon"></i> الوضع المظلم';
+            }
+        }
+        
+        // 5. إشعار للصفحات قيد التطوير
+        function showComingSoon(feature) {
+            alert(`⚠️ ${feature} - قيد التطوير\nهذه الميزة قيد التطوير وسيتم إضافتها قريبًا.`);
+            return false;
+        }
+        
+        // 6. تحديث الوقت
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ar-SA');
+            document.getElementById('currentTime').textContent = timeString;
+        }
+        
+        // 7. تحديث الإحصائيات بشكل عشوائي (محاكاة للبيانات الحية)
+        function updateStats() {
+            const salesValue = Math.floor(Math.random() * 50000) + 40000;
+            const ordersValue = Math.floor(Math.random() * 200) + 100;
+            const customersValue = Math.floor(Math.random() * 150) + 50;
+            
+            document.querySelector('.sales .stat-value').textContent = salesValue.toLocaleString('ar-SA') + ' ر.س';
+            document.querySelector('.orders .stat-value').textContent = ordersValue.toLocaleString('ar-SA');
+            document.querySelector('.customers .stat-value').textContent = customersValue.toLocaleString('ar-SA');
+            
+            // تحديث الوقت
+            updateTime();
+        }
+        
+        // 8. التهيئة عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            updateTime();
+            
+            // تحديث الإحصائيات كل 30 ثانية
+            setInterval(updateStats, 30000);
+            
+            // إغلاق القائمة عند النقر خارجها
+            document.addEventListener('click', function(event) {
+                const navMenu = document.getElementById('navMenu');
+                const mobileBtn = document.getElementById('mobileMenuBtn');
+                
+                if (!navMenu.contains(event.target) && !mobileBtn.contains(event.target)) {
+                    navMenu.classList.remove('active');
+                }
+            });
+        });
+        
+        // 9. محاكاة البيانات الحية
+        setInterval(() => {
+            // تحديث المخططات بشكل عشوائي
+            if (salesChart && Math.random() > 0.7) {
+                const newData = salesChart.data.datasets[0].data.map(value => {
+                    const change = Math.random() > 0.5 ? 1.05 : 0.95;
+                    return Math.floor(value * change);
+                });
+                salesChart.data.datasets[0].data = newData;
+                salesChart.update();
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
